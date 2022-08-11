@@ -1,0 +1,50 @@
+Scene: Untitled
+Entites:
+  - EntityID: 12614872598445079855
+    TagComponent:
+      Tag: Left
+    TransformComponent:
+      Position: [0, 0, 0.5]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.841822922, 0, 0.857142866, 1]
+      TilingFactor: 1
+  - EntityID: 15671253861404076767
+    TagComponent:
+      Tag: Right
+    TransformComponent:
+      Position: [0.5, 5.24597316e-17, 0]
+      Rotation: [0, -1.57079637, 0]
+      Scale: [0.999999821, 0.999999702, 0.999999881]
+    SpriteRendererComponent:
+      Color: [0.783783793, 0, 0.779118776, 1]
+      TilingFactor: 1
+  - EntityID: 15549976346537631092
+    TagComponent:
+      Tag: Top
+    TransformComponent:
+      Position: [0, 0.5, 0]
+      Rotation: [1.57079637, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 0, 0.904762745, 1]
+      TilingFactor: 1
+  - EntityID: 1882616091800874760
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Position: [3.03999996, 2.15181279, 3.26999998]
+      Rotation: [-0.495297164, 0.649262488, 0.3333579]
+      Scale: [1, 0.999999821, 0.999999821]
+    CameraComponent:
+      Camera:
+        ProjectionType: 0
+        PresVerticalFOV: 0.785398185
+        PresNearClip: 0.00999999978
+        PresFarClip: 1000
+        OrthoSize: 10
+        OrthoNearClip: -1
+        OrthoFarClip: 1
+      Primary: true
+      FixedAspectRatio: false

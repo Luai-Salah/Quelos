@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="android_test">
+      <UniqueIdentifier>{E593A499-D1F6-333E-7A7C-6CF466BEFFC0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="glslc">
+      <UniqueIdentifier>{7A0C840F-E620-ACC0-AFA2-4F201B76A8F1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="glslc\src">
+      <UniqueIdentifier>{91776513-FDE1-198A-4620-CB2FB2C9F7DE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libshaderc">
+      <UniqueIdentifier>{569876B0-4250-B8FD-AB57-9159972E53EE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libshaderc\include">
+      <UniqueIdentifier>{C9B5E9C5-B599-AA1B-1EFA-A46E0AFD949D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libshaderc\include\shaderc">
+      <UniqueIdentifier>{B22BAFFE-9E3B-5BCF-07F5-BFEDF3234A68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libshaderc\src">
+      <UniqueIdentifier>{6D9132C0-595F-26C6-42F3-96EC2E60022B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libshaderc_util">
+      <UniqueIdentifier>{B379EAC9-1F05-588E-2816-DB829420B48E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libshaderc_util\include">
+      <UniqueIdentifier>{26A4E352-92DB-2BEA-9BE5-8F0D079C52E3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libshaderc_util\include\libshaderc_util">
+      <UniqueIdentifier>{C36B8A88-2FFB-4B73-38F7-2C8BA405877F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libshaderc_util\src">
+      <UniqueIdentifier>{4AD94149-B63A-1F57-3FA8-6509AB085616}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="glslc\src\dependency_info.h">
+      <Filter>glslc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="glslc\src\file.h">
+      <Filter>glslc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="glslc\src\file_compiler.h">
+      <Filter>glslc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="glslc\src\file_includer.h">
+      <Filter>glslc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="glslc\src\resource_parse.h">
+      <Filter>glslc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="glslc\src\shader_stage.h">
+      <Filter>glslc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc\include\shaderc\env.h">
+      <Filter>libshaderc\include\shaderc</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc\include\shaderc\shaderc.h">
+      <Filter>libshaderc\include\shaderc</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc\include\shaderc\shaderc.hpp">
+      <Filter>libshaderc\include\shaderc</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc\include\shaderc\status.h">
+      <Filter>libshaderc\include\shaderc</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc\include\shaderc\visibility.h">
+      <Filter>libshaderc\include\shaderc</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc\src\common_shaders_for_test.h">
+      <Filter>libshaderc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc\src\shaderc_private.h">
+      <Filter>libshaderc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\include\libshaderc_util\args.h">
+      <Filter>libshaderc_util\include\libshaderc_util</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\include\libshaderc_util\compiler.h">
+      <Filter>libshaderc_util\include\libshaderc_util</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\include\libshaderc_util\counting_includer.h">
+      <Filter>libshaderc_util\include\libshaderc_util</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\include\libshaderc_util\exceptions.h">
+      <Filter>libshaderc_util\include\libshaderc_util</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\include\libshaderc_util\file_finder.h">
+      <Filter>libshaderc_util\include\libshaderc_util</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\include\libshaderc_util\format.h">
+      <Filter>libshaderc_util\include\libshaderc_util</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\include\libshaderc_util\io_shaderc.h">
+      <Filter>libshaderc_util\include\libshaderc_util</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\include\libshaderc_util\message.h">
+      <Filter>libshaderc_util\include\libshaderc_util</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\include\libshaderc_util\mutex.h">
+      <Filter>libshaderc_util\include\libshaderc_util</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\include\libshaderc_util\resources.h">
+      <Filter>libshaderc_util\include\libshaderc_util</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\include\libshaderc_util\shader_stage.h">
+      <Filter>libshaderc_util\include\libshaderc_util</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\include\libshaderc_util\spirv_tools_wrapper.h">
+      <Filter>libshaderc_util\include\libshaderc_util</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\include\libshaderc_util\string_piece.h">
+      <Filter>libshaderc_util\include\libshaderc_util</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\include\libshaderc_util\universal_unistd.h">
+      <Filter>libshaderc_util\include\libshaderc_util</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\include\libshaderc_util\version_profile.h">
+      <Filter>libshaderc_util\include\libshaderc_util</Filter>
+    </ClInclude>
+    <ClInclude Include="libshaderc_util\src\death_test.h">
+      <Filter>libshaderc_util\src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="android_test\test.cpp">
+      <Filter>android_test</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

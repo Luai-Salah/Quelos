@@ -1,0 +1,12 @@
+Scene: Mia
+Entites:
+  - EntityID: 1903781876700823163
+    TagComponent:
+      Tag: Mia
+    TransformComponent:
+      Position: [-2.02689219, 0.326586097, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.750228822, 0.155659065, 0.857651234, 1]
+      TilingFactor: 3

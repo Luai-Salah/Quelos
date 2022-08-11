@@ -1,0 +1,18 @@
+[submodule "Quelos/vendor/glfw"]
+	path = Quelos/vendor/glfw
+	url = https://github.com/TheCherno/glfw.git
+[submodule "Quelos/vendor/ImGuizmo"]
+	path = Quelos/vendor/ImGuizmo
+	url = https://github.com/TheCherno/ImGuizmo.git
+[submodule "Quelos/vendor/glm"]
+	path = Quelos/vendor/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "Quelos/vendor/imgui"]
+	path = Quelos/vendor/imgui
+	url = https://github.com/TheCherno/imgui.git
+[submodule "Quelos/vendor/spdlog"]
+	path = Quelos/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "Quelos/vendor/yaml-cpp"]
+	path = Quelos/vendor/yaml-cpp
+	url = https://github.com/TheCherno/yaml-cpp.git

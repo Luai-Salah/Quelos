@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Gui">
+      <UniqueIdentifier>{6AF0870B-D6F9-877C-5F75-9E7CCB7D937C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lighting">
+      <UniqueIdentifier>{5B1EC029-47EB-1A35-7004-09DD5C3050C3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows">
+      <UniqueIdentifier>{5032B729-BC11-36C5-C529-C19B31889C26}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\EditorLayer.h" />
+    <ClInclude Include="src\Gui\EditorGui.h">
+      <Filter>Gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lighting\LightingLayer.h">
+      <Filter>Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Windows\ConsolePanal.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Windows\ContentBrowserPanel.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Windows\InspectorPanel.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Windows\SceneHierarchyPanal.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Windows\SpriteEditorWindow.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\EditorLayer.cpp" />
+    <ClCompile Include="src\Gui\EditorGui.cpp">
+      <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lighting\LightingLayer.cpp">
+      <Filter>Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QuelosEditorApp.cpp" />
+    <ClCompile Include="src\Windows\ContentBrowserPanel.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Windows\InspectorPanel.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Windows\SceneHierarchyPanal.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Windows\SpriteEditorWindow.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

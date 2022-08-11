@@ -1,0 +1,40 @@
+Scene: 2DExample
+Entites:
+  - EntityID: 6609311498469078225
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PresVerticalFOV: 0.785398185
+        PresNearClip: 0.00999999978
+        PresFarClip: 1000
+        OrthoSize: 10
+        OrthoNearClip: -1
+        OrthoFarClip: 1
+      Primary: true
+      FixedAspectRatio: false
+  - EntityID: 5861668477652418669
+    TagComponent:
+      Tag: Quad 2
+    TransformComponent:
+      Position: [0, -3.62945843, 0]
+      Rotation: [0, 0, 0]
+      Scale: [13.6144924, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      TilingFactor: 1
+  - EntityID: 9278148837961975183
+    TagComponent:
+      Tag: Quad 1
+    TransformComponent:
+      Position: [2.46415377, 1.83393621, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0, 1, 0.733590603, 1]
+      TilingFactor: 1
