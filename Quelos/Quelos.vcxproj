@@ -98,7 +98,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>QSPCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;QS_PLATFORM_WINDOWS;QS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;QS_PLATFORM_WINDOWS;QS_ENABLE_ASSERT;QS_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Box2D\include;vendor\Glad\include;vendor\ImGui;vendor\glm;vendor\stb_image;vendor\EnTT\include;vendor\yaml-cpp\include;vendor\ImGuizmo;vendor\Shaderc\libshaderc\include;vendor\SpirV-Cross;C:\VulkanSDK\1.3.216.0\Include;vendor\mono\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>

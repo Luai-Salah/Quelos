@@ -40,10 +40,10 @@ namespace Quelos
 
 		const char* format =
 R"(Createing Window:
-	Title: {0}
-	Size: ({1}, {2}))";
+	Title: {}
+	Size: ({}, {}))";
 
-		QS_CORE_LOG(format, m_Data.Title.c_str(), (int)m_Data.Width, (int)m_Data.Height);
+		//QS_CORE_LOG(format, m_Data.Title.c_str(), (int)m_Data.Width, (int)m_Data.Height);
 
 		if (s_GLFWWindowCount == 0)
 		{

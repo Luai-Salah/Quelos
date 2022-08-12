@@ -118,7 +118,7 @@ namespace Quelos
 		ImGui::SameLine();
 		ImGui::PushItemWidth(-1);
 
-		if (ImGui::Button("Add Component", { ImGui::GetContentRegionAvailWidth(), 0.0f }))
+		if (ImGui::Button("Add Component", { ImGui::GetContentRegionAvail().x, 0.0f }))
 			ImGui::OpenPopup("AddComponent");
 
 		if (ImGui::BeginPopup("AddComponent"))

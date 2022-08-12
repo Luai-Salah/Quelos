@@ -7,7 +7,7 @@
     <ProjectGuid>{C9BAACF6-35D1-AA8C-7E48-36AEEA9D7B14}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Quelos</RootNamespace>
+    <RootNamespace>Quelos-ScriptCore</RootNamespace>
     <AssemblyName>Quelos-ScriptCore</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -21,8 +21,7 @@
     <OutputPath>..\QuelosEditor\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\QuelosEditor\Resources\Scripts\Intermediates\Debug\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -34,8 +33,7 @@
     <OutputPath>..\QuelosEditor\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\QuelosEditor\Resources\Scripts\Intermediates\Release\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -47,8 +45,7 @@
     <OutputPath>..\QuelosEditor\Resources\Scripts\</OutputPath>
     <BaseIntermediateOutputPath>..\QuelosEditor\Resources\Scripts\Intermediates\Dist\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants></DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -60,11 +57,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\CameraController.cs" />
+    <Compile Include="Source\Player.cs" />
+    <Compile Include="Source\Quelos\Entity.cs" />
     <Compile Include="Source\Quelos\Input.cs" />
     <Compile Include="Source\Quelos\InternalCalls.cs" />
-    <Compile Include="Source\Quelos\Entity.cs" />
     <Compile Include="Source\Quelos\KeyCodes.cs" />
-    <Compile Include="Source\Player.cs" />
     <Compile Include="Source\Quelos\Scene\Components.cs" />
     <Compile Include="Source\Quelos\Vector2.cs" />
     <Compile Include="Source\Quelos\Vector3.cs" />

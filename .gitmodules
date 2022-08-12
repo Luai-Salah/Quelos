@@ -16,3 +16,6 @@
 [submodule "Quelos/vendor/yaml-cpp"]
 	path = Quelos/vendor/yaml-cpp
 	url = https://github.com/TheCherno/yaml-cpp.git
+[submodule "Quelos/vendor/box2d"]
+	path = Quelos/vendor/box2d
+	url = https://github.com/TheCherno/box2d.git

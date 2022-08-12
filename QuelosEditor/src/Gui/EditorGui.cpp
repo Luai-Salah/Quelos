@@ -57,7 +57,7 @@ namespace Quelos
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvailWidth());
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
 
 		bool used = ImGui::DragFloat("##f", &value, speed, min, max);
@@ -237,7 +237,7 @@ namespace Quelos
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
-		ImGui::PushItemWidth(ImGui::GetContentRegionAvailWidth());
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
 
 		bool used = ImGui::ColorEdit4("##ce", glm::value_ptr(values));
