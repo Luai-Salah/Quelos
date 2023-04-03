@@ -1,7 +1,6 @@
 # Quelos
-A Game Engine based on Hazel made by The Cherno
+A Game Engine based on Hazel 2D made by The Cherno: https://www.youtube.com/@TheCherno
 
-just a fun project I am working on, adding stuff to it whenever I am free.
-though most of the stuff I add are eventually added to the main engine so it doesn't make much of a difference xD
+The end goal is a more extended and more polished version of the Hazel 2D since it's going to get discotinued at some point. And it will eventually support 3D as well (hopefully).
 
-The end goal is a more extended and more polished version of the Hazel 2D since it's going to get discotinued at some point. And it will eventually support 3D as well (hopefully)
+For context it's a 2D Game Engine with a proper editor and a 3D scene view for convenience with a set of 2D tools that will help building games. A 3D game can be built in it but it will be rather hard becuase the engine lacks the needed tools. After the core 2D engine is done this Engine will start supporting 3D bit by bit but the main focus will still be 2D
