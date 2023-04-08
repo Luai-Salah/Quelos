@@ -3,8 +3,8 @@ project "Quelos-ScriptCore"
 	language "C#"
 	dotnetframework "4.8"
 
-	targetdir ("%{wks.location}/QuelosEditor/Resources/Scripts")
-	objdir ("%{wks.location}/QuelosEditor/Resources/Scripts/Intermediates")
+	targetdir ("../QuelosEditor/Resources/Scripts")
+	objdir ("../QuelosEditor/Resources/Scripts/Intermediates")
 
 	files {
 		"Source/**.cs",

@@ -10,7 +10,7 @@ namespace Quelos
 	class AssetsManager
 	{
 	public:
-		static void Init();
+		static void Init(const std::filesystem::path& path);
 
 		static void UpdateAssetsFolder();
 
@@ -18,6 +18,7 @@ namespace Quelos
 
 		static void SerializeAsset(const Ref<Texture2D>& texture);
 
+		static std::filesystem::path GetAssetsPath();
 		static std::filesystem::path GetScene(std::string name);
 		static std::filesystem::directory_entry GetDirectories(std::string name);
 	};

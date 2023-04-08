@@ -43,7 +43,6 @@ namespace Quelos
 		Input::Init();
 		Renderer::Init();
 		ScriptEngine::Init();
-		AssetsManager::Init();
 
 		//Scripting::Init();
 
@@ -85,6 +84,8 @@ namespace Quelos
 
 			Time::OnUpdate();
 			TimeStep timestep = Time::DeltaTime();
+
+			ExecuteMainThreadQueue();
 			
 			if (!m_Minimized)
 			{
@@ -134,6 +135,16 @@ namespace Quelos
 		return false;
 	}
 
+	void Application::ExecuteMainThreadQueue()
+	{
+		std::scoped_lock<std::mutex> lock(m_MainThreadQueueMutex);
+
+		for (auto& func : m_MainThreadQueue)
+			func();
+
+		m_MainThreadQueue.clear();
+	}
+
 	void Application::OnClose()
 	{
 		QS_CORE_ERROR("Application Closed");
@@ -170,5 +181,11 @@ namespace Quelos
 
 		m_LayerStack.PopOverlay(overlay);
 		overlay->OnDetach();
+	}
+	void Application::SubmitToMainThread(const std::function<void()>& function)
+	{
+		std::scoped_lock<std::mutex> lock(m_MainThreadQueueMutex);
+
+		m_MainThreadQueue.emplace_back(function);
 	}
 }

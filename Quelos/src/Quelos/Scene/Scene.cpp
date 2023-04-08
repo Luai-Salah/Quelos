@@ -36,17 +36,11 @@ namespace Quelos
 	{
 	}
 
-	void Scene::OnUpdateEditor(TimeStep ts, EditorCamera& camera)
+	void Scene::OnUpdateEditor(TimeStep ts)
 	{
-		// Renderering
-		Renderer2D::BeginScene(camera);
-		
-		RenderScene();
-
-		Renderer2D::EndScene();
 	}
 
-	void Scene::OnUpdateSimulation(TimeStep ts, EditorCamera& camera)
+	void Scene::OnUpdateSimulation(TimeStep ts)
 	{
 		// Physics Simulation
 		if (m_PhysicsWorld)
@@ -68,13 +62,6 @@ namespace Quelos
 				transform.Rotation.z = body->GetAngle();
 			});
 		}
-
-		// Renderering
-		Renderer2D::BeginScene(camera);
-
-		RenderScene();
-
-		Renderer2D::EndScene();
 	}
 
 	void Scene::OnUpdateRuntime(TimeStep ts)
@@ -116,7 +103,30 @@ namespace Quelos
 				transform.Rotation.z = body->GetAngle();
 			});
 		}
+	}
 
+	void Scene::OnRenderEditor(EditorCamera& camera)
+	{
+		// Renderering
+		Renderer2D::BeginScene(camera);
+
+		RenderScene();
+
+		Renderer2D::EndScene();
+	}
+
+	void Scene::OnRenderSimulation(EditorCamera& camera)
+	{
+		// Renderering
+		Renderer2D::BeginScene(camera);
+
+		RenderScene();
+
+		Renderer2D::EndScene();
+	}
+
+	void Scene::OnRenderRuntime()
+	{
 		// Render 2D
 		Camera* mainCamera = nullptr;
 		Matrix4 camTransform;
@@ -125,7 +135,7 @@ namespace Quelos
 
 			for (auto entity : group)
 			{
-				auto[transform, camera] = group.get<TransformComponent, CameraComponent>(entity);
+				auto [transform, camera] = group.get<TransformComponent, CameraComponent>(entity);
 
 				if (camera.Primary)
 				{
@@ -144,7 +154,7 @@ namespace Quelos
 			Renderer2D::BeginScene(*mainCamera, camTransform);
 
 			RenderScene();
-			
+
 			Renderer2D::EndScene();
 		}
 	}
@@ -205,6 +215,18 @@ namespace Quelos
 	{
 		if (m_EntityMap.find(guid) != m_EntityMap.end())
 			return { m_EntityMap.at(guid), this };
+
+		return { };
+	}
+
+	Entity Scene::FindEntityByName(std::string_view name)
+	{
+		for (auto& entity : m_Registry.view<TagComponent>())
+		{
+			const auto& tagComponent = m_Registry.get<TagComponent>(entity);
+			if (tagComponent.Tag == name)
+				return { entity, this };
+		}
 
 		return { };
 	}
@@ -309,12 +331,13 @@ namespace Quelos
 
 	void Scene::DestroyEntity(Entity entity)
 	{
-		m_Registry.destroy(entity);
 		m_EntityMap.erase(entity.GetGUID());
+		m_Registry.destroy(entity);
 	}
 
 	void Scene::OnRuntimeStart()
 	{
+		m_IsRunning = true;
 		OnPhysics2DStart();
 
 		ScriptEngine::OnRuntimeStart(this);
@@ -322,6 +345,7 @@ namespace Quelos
 		{
 			// Instantiate all script entities
 			auto view = m_Registry.view<ScriptComponent>();
+			std::vector<Entity> scriptEntities;
 			for (auto e : view)
 			{
 				Entity entity = { e, this };
@@ -330,8 +354,12 @@ namespace Quelos
 				if (ScriptEngine::EntityClassExists(script.ClassName))
 				{
 					ScriptEngine::OnCreateEntity(entity);
+					scriptEntities.push_back(entity);
 				}
 			}
+
+			for (const auto& entity : scriptEntities)
+				ScriptEngine::OnStartEntity(entity);
 		}
 	}
 
@@ -342,6 +370,7 @@ namespace Quelos
 
 	void Scene::OnRuntimeStop()
 	{
+		m_IsRunning = false;
 		OnPhysics2DStop();
 
 		ScriptEngine::OnRuntimeStop();
@@ -386,7 +415,7 @@ namespace Quelos
 				fixtureDef.friction = bc2d.Friction;
 				fixtureDef.restitution = bc2d.Restitution;
 				fixtureDef.restitutionThreshold = bc2d.RestitutionThreshold;
-				body->CreateFixture(&fixtureDef);
+				bc2d.RuntimeFixture = body->CreateFixture(&fixtureDef);
 			}
 
 			if (entity.HasComponent<CircleCollider2DComponent>())

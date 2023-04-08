@@ -38,6 +38,11 @@ namespace Quelos
 	{
 	}
 
+	void InspectorPanel::SetContext(const Ref<Scene>& contex)
+	{
+		m_Context = contex;
+	}
+
 	void InspectorPanel::SetSelectedEntity(Entity entity)
 	{
 		m_SelectedTexture = nullptr;
@@ -213,18 +218,73 @@ namespace Quelos
 			}
 		});
 
-		EditorGui::Component<ScriptComponent>("Script", entity, [](Entity entity, ScriptComponent& sc)
+		EditorGui::Component<ScriptComponent>("Script", entity, [scene = m_Context](Entity entity, ScriptComponent& sc) mutable
 		{
 			bool scriptExists = ScriptEngine::EntityClassExists(sc.ClassName);
 
 			static char buffer[64];
-			strcpy(buffer, sc.ClassName.c_str());
+			strcpy_s(buffer, sizeof(buffer), sc.ClassName.c_str());
 
 			if (!scriptExists)
 				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.9f, 0.2f, 0.2f, 1.0f));
 			if (ImGui::InputText("Class", buffer, sizeof(buffer)))
-			{
 				sc.ClassName = buffer;
+
+			// Fields
+			if (scene->IsRunning())
+			{
+				Ref<ScriptInstance> scriptInstance = ScriptEngine::GetEntityScriptInstance(entity);
+				if (scriptInstance)
+				{
+					const auto& fields = scriptInstance->GetScriptClass()->GetFields();
+					for (const auto& [name, field] : fields)
+					{
+						if (field.Type == ScriptFieldType::Float)
+						{
+							float data = scriptInstance->GetFieldValue<float>(name);
+							if (EditorGui::InputFloat(name, data))
+								scriptInstance->SetFieldValue(name, data);
+						}
+					}
+				}
+			}
+			else
+			{
+				if (scriptExists)
+				{
+					Ref<ScriptClass> entityClass = ScriptEngine::GetEntityClass(sc.ClassName);
+					const auto& fields = entityClass->GetFields();
+
+					auto& entityFields = ScriptEngine::GetScriptFieldMap(entity);
+					for (const auto& [name, field] : fields)
+					{
+						if (entityFields.find(name) != entityFields.end())
+						{
+							ScriptFieldInstance& scriptField = entityFields.at(name);
+							
+							if (field.Type == ScriptFieldType::Float)
+							{
+								float data = scriptField.GetValue<float>();
+								if (EditorGui::InputFloat(name, data))
+									scriptField.SetValue(data);
+							}
+						}
+						else
+						{
+							if (field.Type == ScriptFieldType::Float)
+							{
+								float data = 0;
+								if (EditorGui::InputFloat(name, data))
+								{
+									ScriptFieldInstance& instance = entityFields[name];
+
+									instance.Field = field;
+									instance.SetValue(data);
+								}
+							}
+						}
+					}
+				}
 			}
 
 			if (!scriptExists)

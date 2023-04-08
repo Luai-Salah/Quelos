@@ -33,9 +33,13 @@ namespace Quelos
 		void OnPhysics2DStart();
 		void OnPhysics2DStop();
 
-		void OnUpdateEditor(TimeStep ts, EditorCamera& camera);
-		void OnUpdateSimulation(TimeStep ts, EditorCamera& camera);
+		void OnUpdateEditor(TimeStep ts);
+		void OnUpdateSimulation(TimeStep ts);
 		void OnUpdateRuntime(TimeStep ts);
+
+		void OnRenderEditor(EditorCamera& camera);
+		void OnRenderSimulation(EditorCamera& camera);
+		void OnRenderRuntime();
 
 		void RenderScene();
 
@@ -45,6 +49,10 @@ namespace Quelos
 
 		Entity GetPrimaryCamera();
 		Entity GetEntityByGUID(GUID guid);
+		
+		Entity FindEntityByName(std::string_view name);
+
+		bool IsRunning() const { return m_IsRunning; }
 
 		template <typename... Components>
 		auto GetAllEntitiesWith()
@@ -57,6 +65,7 @@ namespace Quelos
 	private:
 		entt::registry m_Registry;
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
+		bool m_IsRunning = false;
 
 		std::unordered_map<GUID, entt::entity> m_EntityMap;
 

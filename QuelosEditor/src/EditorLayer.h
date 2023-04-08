@@ -31,10 +31,15 @@ namespace Quelos
 		void SaveSceneAs();
 		void SaveScene();
 
+		void NewProject();
+		void OpenProject(const std::filesystem::path& path);
+		void SaveProject();
+
 		void SerializeScene(Ref<Scene> scene, const std::filesystem::path& path);
 
 		void OnScenePlay();
 		void OnSceneStop();
+		void OnScenePause();
 
 		void OnSimulationStart();
 
@@ -46,7 +51,7 @@ namespace Quelos
 		void UI_Toolbar();
 	private:
 		Ref<FrameBuffer> m_FrameBuffer;
-		Ref<Texture2D> m_IconPlay, m_IconStop, m_IconSimStart, m_IconSimStop, m_Container;
+		Ref<Texture2D> m_IconPlay, m_IconPause, m_IconStop, m_IconStep, m_IconSimStart, m_IconSimStop, m_Container;
 
 		EditorCamera m_EditorCamera;
 
@@ -76,7 +81,9 @@ namespace Quelos
 		};
 
 		SceneState m_SceneState = SceneState::Edit;
+		bool m_ScenePaused = false;
+		bool m_SceneStep = false;
 
-		Lighting::Lighting m_Lighting;
+		//Lighting::Lighting m_Lighting;
 	};
 }

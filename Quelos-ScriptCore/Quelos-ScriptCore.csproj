@@ -56,8 +56,6 @@
   <ItemGroup Condition=" '$(Configuration)|$(Platform)' == 'Dist|x64' ">
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Source\CameraController.cs" />
-    <Compile Include="Source\Player.cs" />
     <Compile Include="Source\Quelos\Entity.cs" />
     <Compile Include="Source\Quelos\Input.cs" />
     <Compile Include="Source\Quelos\InternalCalls.cs" />

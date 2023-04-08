@@ -297,6 +297,9 @@ namespace Quelos
 			// Bind textures
 			for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
 			{
+				if (!s_Data.TextureSlots[i])
+					continue;
+
 				s_Data.TextureSlots[i]->Bind(i);
 				s_Data.Stats.Textures++;
 			}

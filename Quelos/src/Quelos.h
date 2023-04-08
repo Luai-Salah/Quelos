@@ -20,6 +20,8 @@
 #include "Quelos/Renderer/Texture.h"
 #include "Quelos/Renderer/SubTexture2D.h"
 
+#include "Quelos/Project/Project.h"
+
 #include "Quelos/Renderer/OrthographicCamera.h"
 #include "Quelos/Renderer/OrthographicCameraController.h"
 

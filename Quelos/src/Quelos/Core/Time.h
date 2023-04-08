@@ -39,7 +39,7 @@ namespace Quelos
 
 			m_Stopped = true;
 
-			return end - start;
+			return (float)(end - start);
 		}
 
 		float ElapsedMillis()

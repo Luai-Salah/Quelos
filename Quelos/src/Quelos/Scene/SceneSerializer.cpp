@@ -5,6 +5,7 @@
 #include "Components.h"
 
 #include <yaml-cpp/yaml.h>
+#include <Quelos/Scripting/ScriptEngine.h>
 
 namespace YAML
 {
@@ -79,10 +80,40 @@ namespace YAML
 			return true;
 		}
 	};
+
+	template<>
+	struct convert<Quelos::GUID>
+	{
+		static Node encode(const Quelos::GUID& guid)
+		{
+			Node node;
+			node.push_back((uint64_t)guid);
+			return node;
+		}
+
+		static bool decode(const Node& node, Quelos::GUID& guid)
+		{
+			guid = node.as<uint64_t>();
+			return true;
+		}
+	};
 }
 
 namespace Quelos
 {
+#define WRITE_SCRIPT_FIELD(FieldType, Type)						\
+			case ScriptFieldType::FieldType:			\
+				out << scriptField.GetValue<Type>();	\
+				break
+
+#define READ_SCRIPT_FIELD(FieldType, Type)						\
+			case Quelos::ScriptFieldType::FieldType:			\
+			{													\
+				Type data = scriptField["Data"].as<Type>();		\
+				instance.SetValue(data);						\
+				break;											\
+			}
+
 	YAML::Emitter& operator<<(YAML::Emitter& out, const Vector2& v)
 	{
 		out << YAML::Flow;
@@ -198,12 +229,70 @@ namespace Quelos
 		if (entity.HasComponent<ScriptComponent>())
 		{
 			out << YAML::Key << "ScriptComponent";
-			out << YAML::BeginMap; // SpriteRendererComponent
+			out << YAML::BeginMap; // ScriptComponent
 
 			auto scriptComponent = entity.GetComponent<ScriptComponent>();
 			out << YAML::Key << "Name" << YAML::Value << scriptComponent.ClassName;
 
-			out << YAML::EndMap; // ScriptComponent
+			Ref<ScriptClass> entityClass = ScriptEngine::GetEntityClass(scriptComponent.ClassName);
+			if (entityClass)
+			{
+				const auto& fields = entityClass->GetFields();
+
+				if (fields.size() < 0)
+				{
+					out << YAML::EndMap; // ScriptComponent
+					return;
+				}
+
+				out << YAML::Key << "ScriptFields" << YAML::Value;
+				{
+					out << YAML::BeginSeq; // ScriptFields
+
+					auto& entityFields = ScriptEngine::GetScriptFieldMap(entity);
+					for (const auto& [name, field] : fields)
+					{
+						if (entityFields.find(name) == entityFields.end())
+							continue;
+
+						out << YAML::BeginMap; // FieldData
+						{
+							out << YAML::Key << "Name" << YAML::Value << name;
+							out << YAML::Key << "Type" << YAML::Value << Utils::ScriptFieldTypeToString(field.Type);
+
+							ScriptFieldInstance& scriptField = entityFields.at(name);
+
+							out << YAML::Key << "Data" << YAML::Value;
+
+							switch (field.Type)
+							{
+								WRITE_SCRIPT_FIELD(None, uint64_t);
+								WRITE_SCRIPT_FIELD(Bool, bool);
+								WRITE_SCRIPT_FIELD(Byte, uint8_t);
+								WRITE_SCRIPT_FIELD(Char, char);
+								WRITE_SCRIPT_FIELD(String, uint64_t);
+								WRITE_SCRIPT_FIELD(Short, int16_t);
+								WRITE_SCRIPT_FIELD(Int, int32_t);
+								WRITE_SCRIPT_FIELD(Long, int64_t);
+								WRITE_SCRIPT_FIELD(UShort, uint16_t);
+								WRITE_SCRIPT_FIELD(UInt, uint32_t);
+								WRITE_SCRIPT_FIELD(ULong, uint64_t);
+								WRITE_SCRIPT_FIELD(Float, float);
+								WRITE_SCRIPT_FIELD(Double, double);
+								WRITE_SCRIPT_FIELD(Vector2, Vector2);
+								WRITE_SCRIPT_FIELD(Vector3, Vector3);
+								WRITE_SCRIPT_FIELD(Vector4, Vector4);
+								WRITE_SCRIPT_FIELD(Entity, GUID);
+							}
+						}
+						out << YAML::EndMap; // FieldData
+					}
+
+					out << YAML::EndSeq; // ScriptFields
+				}
+
+				out << YAML::EndMap; // ScriptComponent
+			}
 		}
 
 		if (entity.HasComponent<SpriteRendererComponent>())
@@ -387,6 +476,55 @@ namespace Quelos
 
 					if (scriptComponent["Name"].IsDefined())
 						sc.ClassName = scriptComponent["Name"].as<std::string>();
+
+					auto scriptFields = scriptComponent["ScriptFields"];
+					if (scriptFields)
+					{
+						Ref<ScriptClass> scriptClass = ScriptEngine::GetEntityClass(sc.ClassName);
+						if (scriptClass)
+						{
+							const auto& fields = scriptClass->GetFields();
+
+							auto& entityFields = ScriptEngine::GetScriptFieldMap(deserializedEntity);
+
+							for (auto scriptField : scriptFields)
+							{
+								std::string name = scriptField["Name"].as<std::string>();
+								std::string typeString = scriptField["Type"].as<std::string>();
+								ScriptFieldType type = Utils::ScriptFieldTypeFromString(typeString);
+
+								ScriptFieldInstance& instance = entityFields[name];
+								if (fields.find(name) == fields.end())
+								{
+									QS_ERROR("Field {} not found.", name);
+									continue;
+								}
+
+								instance.Field = fields.at(name);
+
+								switch (type)
+								{
+									READ_SCRIPT_FIELD(None, uint64_t);
+									READ_SCRIPT_FIELD(Bool, bool);
+									READ_SCRIPT_FIELD(Byte, uint8_t);
+									READ_SCRIPT_FIELD(Char, char);
+									READ_SCRIPT_FIELD(String, uint64_t);
+									READ_SCRIPT_FIELD(Short, int16_t);
+									READ_SCRIPT_FIELD(Int, int32_t);
+									READ_SCRIPT_FIELD(Long, int64_t);
+									READ_SCRIPT_FIELD(UShort, uint16_t);
+									READ_SCRIPT_FIELD(UInt, uint32_t);
+									READ_SCRIPT_FIELD(ULong, uint64_t);
+									READ_SCRIPT_FIELD(Float, float);
+									READ_SCRIPT_FIELD(Double, double);
+									READ_SCRIPT_FIELD(Vector2, Vector2);
+									READ_SCRIPT_FIELD(Vector3, Vector3);
+									READ_SCRIPT_FIELD(Vector4, Vector4);
+									READ_SCRIPT_FIELD(Entity, GUID);
+								}
+							}
+						}
+					}
 				}
 
 				auto spriteRendererComponent = entity["SpriteRendererComponent"];

@@ -18,6 +18,7 @@ project "QuelosEditor"
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.Box2D}",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.filewatch}",
 		"%{IncludeDir.EnTT}",
 		"%{IncludeDir.yaml_cpp}",
 		"%{IncludeDir.ImGuizmo}"

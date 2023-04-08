@@ -14,6 +14,8 @@ namespace Quelos
             Transform = new TransformComponent { Entity = this };
         }
 
+        public static implicit operator bool(Entity entity) => entity != null;
+
         public TransformComponent Transform { get; }
 
         public Vector3 Position
@@ -39,6 +41,25 @@ namespace Quelos
         {
             Type componentType = typeof(T);
             return InternalCalls.Entity_HasComponent(ID, componentType);
+        }
+
+        public Entity FindEntityByName(string name)
+        {
+            ulong entityID = InternalCalls.Entity_FindEntityByName(name);
+            if (entityID == 0)
+                return null;
+
+            return new Entity(entityID);
+        }
+
+        public T As<T>() where T : Entity, new()
+        {
+            object instance = InternalCalls.Entity_GetScriptInstance(ID);
+
+            if (instance is T t)
+                return t;
+
+            return null;
         }
 
         public void Log(object text) => InternalCalls.NativeLog(text.ToString());

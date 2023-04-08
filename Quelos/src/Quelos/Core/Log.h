@@ -20,7 +20,7 @@ namespace Quelos
 
 #define QS_CORE_ERROR(...) ::Quelos::Log::GetCoreLogger()->error(__VA_ARGS__)
 #define QS_CORE_TRACE(...) ::Quelos::Log::GetCoreLogger()->trace(__VA_ARGS__)
-#define QS_CORE_LOG(...) ::Quelos::Log::GetCoreLogger()->info(__VA_ARGS__)
+#define QS_CORE_INFO(...) ::Quelos::Log::GetCoreLogger()->info(__VA_ARGS__)
 #define QS_CORE_WARN(...) ::Quelos::Log::GetCoreLogger()->warn(__VA_ARGS__)
 #define QS_CORE_CRITICAL(...) ::Quelos::Log::GetCoreLogger()->critical(__VA_ARGS__)
 

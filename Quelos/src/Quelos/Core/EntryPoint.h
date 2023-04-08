@@ -2,12 +2,12 @@
 
 #ifdef QS_PLATFORM_WINDOWS
 
-extern Quelos::Application* Quelos::CreateApplication();
+extern Quelos::Application* Quelos::CreateApplication(const Quelos::ApplicationCommandLineArgs&);
 
-int main()
+int main(int argc, char* argv[])
 {
 	QS_PROFILE_BEGIN_SESSION("Startup", "Profiling\\QS_Profile-Startup.json");
-	auto app = Quelos::CreateApplication();
+	auto app = Quelos::CreateApplication(Quelos::ApplicationCommandLineArgs { argc, argv });
 	QS_PROFILE_END_SESSION();
 
 	QS_PROFILE_BEGIN_SESSION("Runtime", "Profiling\\QS_Profile-Runtime.json");

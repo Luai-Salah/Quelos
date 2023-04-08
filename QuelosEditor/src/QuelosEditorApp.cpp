@@ -22,11 +22,14 @@ namespace Quelos
 
 	};
 
-	Application* CreateApplication()
+	Application* CreateApplication(const ApplicationCommandLineArgs& commandLineArgs)
 	{
 		ApplicationSpecification appSpec;
 		appSpec.Name = "Quelos Editor";
 		appSpec.WorkingDirectory = "../QuelosEditor";
+		appSpec.CommandLineArgs = commandLineArgs;
+
+		Project::New()->SaveActive("Sandbox.qproj");
 
 		return new QuelosEditor(appSpec);
 	}

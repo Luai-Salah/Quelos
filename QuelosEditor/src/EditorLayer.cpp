@@ -1,11 +1,11 @@
 #include "EditorLayer.h"
 
 #include "Quelos/Scene/SceneSerializer.h"
-
 #include "Quelos/Utiles/PlatformUtils.h"
-#include "Gui/EditorGui.h"
-
 #include "Quelos/Core/Application.h"
+#include "Quelos/Scripting/ScriptEngine.h"
+
+#include "Gui/EditorGui.h"
 
 #include <ImGuizmo.h>
 #include <glm/glm.hpp>
@@ -16,8 +16,12 @@ namespace Quelos
     extern std::filesystem::path g_AssetsPath;
 
     EditorLayer::EditorLayer()
-        : Layer("SandboxLayer"), m_HierarchyPanel(nullptr, m_InspectorPanel), m_Lighting(m_EditorCamera)
+        : Layer("SandboxLayer"), m_HierarchyPanel(nullptr, m_InspectorPanel)
     {
+        m_ViewportBounds[0] = { 0, 0 };
+        m_ViewportBounds[1] = { 0, 0 };
+
+        m_ViewportSize = { 0, 0 };
     }
 
     void EditorLayer::OnAttach()
@@ -25,7 +29,9 @@ namespace Quelos
         QS_PROFILE_FUNCTION();
 
         m_IconPlay = Texture2D::Create("Resources/Icons/PlayButton.png");
+        m_IconPause = Texture2D::Create("Resources/Icons/PauseButton.png");
         m_IconStop = Texture2D::Create("Resources/Icons/StopButton.png");
+        m_IconStep = Texture2D::Create("Resources/Icons/StepButton.png");
         m_IconSimStart = Texture2D::Create("Resources/Icons/SimulationButton.png");
         m_IconSimStop = Texture2D::Create("Resources/Icons/StopSimulationButton.png");
 
@@ -36,6 +42,18 @@ namespace Quelos
         fbSpec.Width = 1280;
         fbSpec.Height = 720;
         m_FrameBuffer = FrameBuffer::Create(fbSpec);
+
+        auto commandLineArgs = Application::Get().GetSpecification().CommandLineArgs;
+        if (commandLineArgs.Count > 1)
+        {
+            auto projFilepath = commandLineArgs[1];
+            OpenProject(projFilepath);
+        }
+        else
+        {
+            // TODO: Propmt user to select directory
+            NewProject();
+        }
 
         m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
         
@@ -74,7 +92,8 @@ namespace Quelos
                 if (m_ViewportFocused)
                     m_EditorCamera.OnUpdate(ts);
 
-                m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
+                m_ActiveScene->OnUpdateEditor(ts);
+                m_ActiveScene->OnRenderEditor(m_EditorCamera);
                 break;
             }
             case SceneState::Simulate:
@@ -82,15 +101,23 @@ namespace Quelos
                 if (m_ViewportFocused)
                     m_EditorCamera.OnUpdate(ts);
 
-                m_ActiveScene->OnUpdateSimulation(ts, m_EditorCamera);
+                if (!m_ScenePaused || m_SceneStep)
+                    m_ActiveScene->OnUpdateSimulation(ts);
+                
+                m_ActiveScene->OnRenderSimulation(m_EditorCamera);
                 break;
             }
             case SceneState::Play:
             {
-                m_ActiveScene->OnUpdateRuntime(ts);
+                if (!m_ScenePaused || m_SceneStep)
+                    m_ActiveScene->OnUpdateRuntime(ts);
+                
+                m_ActiveScene->OnRenderRuntime();
                 break;
             }
         }
+
+        m_SceneStep = false;
 
         auto [mx, my] = ImGui::GetMousePos();
         mx -= m_ViewportBounds[0].x;
@@ -224,7 +251,7 @@ namespace Quelos
             m_ConsolePanel.Draw("Console", &show_console);
 
         if (Input::GetKeyDown(KeyCode::Space))
-            m_ConsolePanel.AddLog("[error] This is an error");
+            m_ConsolePanel.AddLog("# This is an error");
 
         static bool show_settings = true;
 
@@ -273,6 +300,15 @@ namespace Quelos
                     ImGui::MenuItem("Viewport", nullptr, &showViewport);
                     ImGui::EndMenu();
                 }
+
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Reload Mono Assembly", "Ctrl+R"))
+                {
+                    if (m_SceneState == SceneState::Edit)
+                        ScriptEngine::ReloadAssembly();
+                }
+
                 ImGui::EndMenu();
             }
 
@@ -283,7 +319,7 @@ namespace Quelos
         m_InspectorPanel.OnImGuiRender();
         m_ContentBrowserPanel.OnImGuiRender();
         m_SpriteEditorWindow.OnImGuiRender();
-        m_Lighting.OnImGuiRender();
+        //m_Lighting.OnImGuiRender();
 
         if (showViewport)
         {
@@ -442,8 +478,8 @@ namespace Quelos
             float size = ImGui::GetWindowHeight() - 4.0f;
 
             Ref<Texture2D> icon = m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate ? m_IconPlay : m_IconStop;
-            ImGui::SetCursorPosX((ImGui::GetContentRegionMax().x * 0.5f) - size);
-            if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { size, size }, { 0, 1 }, {1, 0}, 0))
+            ImGui::SetCursorPosX((ImGui::GetContentRegionMax().x * 0.5f) - size * 2.0f);
+            if (ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererID(), { size, size }, { 0, 1 }, {1, 0}, 0))
             {
                 if (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate)
                     OnScenePlay();
@@ -454,12 +490,27 @@ namespace Quelos
             ImGui::SameLine();
 
             icon = m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play ? m_IconSimStart : m_IconSimStop;
-            if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { size, size }, { 0, 1 }, {1, 0}, 0))
+            if (ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererID(), { size, size }, { 0, 1 }, {1, 0}, 0))
             {
                 if (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play)
                     OnSimulationStart();
                 else if (m_SceneState == SceneState::Simulate)
                     OnSceneStop();
+            }
+
+            ImGui::SameLine();
+
+            if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconPause->GetRendererID(), { size, size }, { 0, 1 }, { 1, 0 }, 0,
+                m_ScenePaused ? ImVec4{ 0.5f, 0.5f, 0.5f, 1.0f } : ImVec4{0, 0, 0, 0}))
+                m_ScenePaused = !m_ScenePaused;
+
+            ImGui::SameLine();
+
+            if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconStep->GetRendererID(), { size, size }, { 0, 1 }, { 1, 0 }, 0))
+            {
+                if (!m_ScenePaused)
+                    m_ScenePaused = true;
+                m_SceneStep = true;
             }
 
             ImGui::End();
@@ -483,7 +534,8 @@ namespace Quelos
 
     void EditorLayer::OnSceneStop()
     {
-        QS_CORE_ASSERT(m_SceneState != SceneState::Simulate || m_SceneState != SceneState::Play, "What?");
+        QS_CORE_ASSERT(m_SceneState == SceneState::Simulate || m_SceneState == SceneState::Play,
+            "EditorLayer::OnSceneStop was called while the scene state wasn't Play or Simulate");
 
         if (m_SceneState == SceneState::Play)
             m_ActiveScene->OnRuntimeStop();
@@ -491,7 +543,13 @@ namespace Quelos
 
         m_SceneState = SceneState::Edit;
         m_ActiveScene = m_EditorScene;
+        m_ScenePaused = false;
         m_HierarchyPanel.SetContext(m_ActiveScene);
+    }
+
+    void EditorLayer::OnScenePause()
+    {
+
     }
 
     void EditorLayer::OnSimulationStart()
@@ -570,7 +628,7 @@ namespace Quelos
 
     void EditorLayer::OnEvent(Event& e)
     {
-        if (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate)
+        if ((m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate) && m_ViewportHovered)
             m_EditorCamera.OnEvent(e);
 
         EventDispatcher dispatcher(e);
@@ -597,11 +655,43 @@ namespace Quelos
                     break;
                 }
 
-                case KeyCode::Q: m_GizmoType = -1; break;
-                case KeyCode::W: m_GizmoType = ImGuizmo::OPERATION::TRANSLATE; break;
-                case KeyCode::E: m_GizmoType = ImGuizmo::OPERATION::ROTATE; break;
-                case KeyCode::R: m_GizmoType = ImGuizmo::OPERATION::SCALE; break;
-                case KeyCode::T: m_GizmoType = ImGuizmo::OPERATION::BOUNDS; break;
+                case KeyCode::Q:
+                {
+                    if (!ImGuizmo::IsUsing())
+                        m_GizmoType = -1;
+                    
+                    break;
+                }
+                case KeyCode::W:
+                {
+                    if (!ImGuizmo::IsUsing())
+                        m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+
+                    break;
+                }
+                case KeyCode::E:
+                {
+                    if (!ImGuizmo::IsUsing())
+                        m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+
+                    break;
+                }
+                case KeyCode::R:
+                {
+                    if (control && m_SceneState == SceneState::Edit)
+                        ScriptEngine::ReloadAssembly();
+                    else if (!ImGuizmo::IsUsing())
+                        m_GizmoType = ImGuizmo::OPERATION::SCALE;
+
+                    break;
+                }
+                case KeyCode::T:
+                {
+                    if (!ImGuizmo::IsUsing())
+                        m_GizmoType = ImGuizmo::OPERATION::BOUNDS;
+                    
+                    break;
+                }
             }
 
             return false;
@@ -676,6 +766,29 @@ namespace Quelos
         if (!m_EditorScenePath.empty())
             SerializeScene(m_ActiveScene, m_EditorScenePath);
         else SaveSceneAs();
+    }
+
+    void EditorLayer::NewProject()
+    {
+        Project::New();
+    }
+
+    void EditorLayer::OpenProject(const std::filesystem::path& path)
+    {
+        if (Ref<Project> project = Project::Load(path))
+        {
+            std::filesystem::path assetsPath = project->GetAssetDirectory();
+            AssetsManager::Init(assetsPath);
+            m_ContentBrowserPanel.SetAssetsPath(assetsPath);
+
+            auto scenePath = assetsPath / Project::GetActiveProject()->GetConfig().StartScene;
+            OpenScene(scenePath);
+        }
+    }
+
+    void EditorLayer::SaveProject()
+    {
+        // Project::SaveActive();
     }
 
     void EditorLayer::SerializeScene(Ref<Scene> scene, const std::filesystem::path& path)

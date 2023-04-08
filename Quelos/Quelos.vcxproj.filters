@@ -31,6 +31,9 @@
     <Filter Include="src\Quelos\Math">
       <UniqueIdentifier>{4E0A8C1F-BA95-F9E3-C3A6-7CD82FB155E4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Quelos\Project">
+      <UniqueIdentifier>{9B51F197-8735-B2ED-F095-AC40DC989C6F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Quelos\Renderer">
       <UniqueIdentifier>{9B9B2883-07FD-0591-906A-4C43FCCA3C50}</UniqueIdentifier>
     </Filter>
@@ -93,10 +96,16 @@
     <ClInclude Include="src\Quelos\Core\AssetsManager.h">
       <Filter>src\Quelos\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Quelos\Core\Buffer.h">
+      <Filter>src\Quelos\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Quelos\Core\Core.h">
       <Filter>src\Quelos\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Quelos\Core\EntryPoint.h">
+      <Filter>src\Quelos\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Quelos\Core\FileSystem.h">
       <Filter>src\Quelos\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Quelos\Core\GUID.h">
@@ -149,6 +158,12 @@
     </ClInclude>
     <ClInclude Include="src\Quelos\Math\Math.h">
       <Filter>src\Quelos\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Quelos\Project\Project.h">
+      <Filter>src\Quelos\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Quelos\Project\ProjectSerializer.h">
+      <Filter>src\Quelos\Project</Filter>
     </ClInclude>
     <ClInclude Include="src\Quelos\Renderer\Buffer.h">
       <Filter>src\Quelos\Renderer</Filter>
@@ -275,6 +290,9 @@
     <ClCompile Include="src\Quelos\Core\AssetsManager.cpp">
       <Filter>src\Quelos\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Quelos\Core\FileSystem.cpp">
+      <Filter>src\Quelos\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Quelos\Core\GUID.cpp">
       <Filter>src\Quelos\Core</Filter>
     </ClCompile>
@@ -298,6 +316,12 @@
     </ClCompile>
     <ClCompile Include="src\Quelos\Math\Math.cpp">
       <Filter>src\Quelos\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Quelos\Project\Project.cpp">
+      <Filter>src\Quelos\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Quelos\Project\ProjectSerializer.cpp">
+      <Filter>src\Quelos\Project</Filter>
     </ClCompile>
     <ClCompile Include="src\Quelos\Renderer\Buffer.cpp">
       <Filter>src\Quelos\Renderer</Filter>

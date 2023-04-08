@@ -19,12 +19,11 @@ namespace Quelos
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		QS_CORE_ASSERT(status, "Failed to initialize Glad!");
 
-		const char* format = R"(OpenGL Info:
-	Vendor: {}
-	Renderer: {}
-	Version: {})";
-
-		//QS_CORE_LOG(format, glGetString(GL_VENDOR), glGetString(GL_RENDERER), glGetString(GL_VERSION));
+		QS_CORE_INFO("OpenGL Info:\n\tVendor: {0}\n\tRenderer: {1}\n\tVersion: {2})",
+			glGetString(GL_VENDOR),
+			glGetString(GL_RENDERER),
+			glGetString(GL_VERSION)
+		);
 	}
 
 	void OpenGLContext::SwapBuffers()

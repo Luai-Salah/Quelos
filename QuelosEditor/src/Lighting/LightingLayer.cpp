@@ -84,8 +84,8 @@ namespace Lighting
         m_MaterialUB = UniformBuffer::Create(sizeof(Material), 3);
         m_LightUB = UniformBuffer::Create(sizeof(Light), 4);
 
-        m_Container = AssetsManager::GetTexture("Assets\\Textures\\Container.png");
-        m_ContainerSpecular = AssetsManager::GetTexture("Assets\\Textures\\Container_Specular.png");
+        m_Container = AssetsManager::GetTexture("Textures\\Container.png");
+        m_ContainerSpecular = AssetsManager::GetTexture("Textures\\Container_Specular.png");
     }
 
     Vector3 cubePositions[] = {

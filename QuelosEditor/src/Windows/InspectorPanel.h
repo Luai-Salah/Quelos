@@ -10,6 +10,7 @@ namespace Quelos
 	public:
 		InspectorPanel();
 		~InspectorPanel();
+		void SetContext(const Ref<Scene>& contex);
 
 		Entity GetSelectedEntity() const { return m_SelectionContext; }
 		void SetSelectedEntity(Entity entity);
@@ -31,5 +32,6 @@ namespace Quelos
 	private:
 		Entity m_SelectionContext;
 		Ref<Texture2D> m_SelectedTexture;
+		Ref<Scene> m_Context;
 	};
 }

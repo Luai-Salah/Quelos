@@ -181,7 +181,7 @@ namespace Quelos
                 Strtrim(s);
                 if (s[0])
                     ExecCommand(s);
-                strcpy(s, "");
+                strcpy_s(s, strlen(""), "");
                 reclaim_focus = true;
             }
 

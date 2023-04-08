@@ -28,6 +28,7 @@ project "Quelos"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.filewatch}",
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.EnTT}",
 		"%{IncludeDir.yaml_cpp}",

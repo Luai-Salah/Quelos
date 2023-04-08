@@ -15,6 +15,7 @@ namespace Quelos
 		Camera(Math::Perspective(Math::Radians(fov), aspectRatio, nearClip, farClip))
 	{
 		UpdateView();
+		MousePan(Vector2{ 0.01f });
 	}
 
 	void EditorCamera::UpdateProjection()

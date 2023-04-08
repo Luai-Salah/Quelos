@@ -18,6 +18,7 @@ namespace Quelos
 	void SceneHierarchyPanal::SetContext(const Ref<Scene>& context)
 	{
 		m_Context = context;
+		m_Inspector.SetContext(context);
 		m_Inspector.SetSelectedEntity({ });
 	}
 

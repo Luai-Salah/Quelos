@@ -10,10 +10,22 @@
 
 namespace Quelos
 {
+	struct ApplicationCommandLineArgs
+	{
+		int Count;
+		char** Arguments;
+
+		std::string operator[](int index)
+		{
+			return Arguments[index];
+		}
+	};
+
 	struct ApplicationSpecification
 	{
 		std::string Name = "Quelos App";
 		std::string WorkingDirectory;
+		ApplicationCommandLineArgs CommandLineArgs;
 	};
 
 	class Application
@@ -36,9 +48,14 @@ namespace Quelos
 		void PushOverlay(Layer* overlay);
 		void PopLayer(Layer* layer);
 		void PopOverlay(Layer* overlay);
+
+		void SubmitToMainThread(const std::function<void()>& function);
+
+		ApplicationSpecification GetSpecification() const { return m_Specification; }
 	private:
 		bool OnWindowCloseEvent(WindowCloseEvent& e);
 		bool OnWindowResizedEvent(WindowResizedEvent& e);
+		void ExecuteMainThreadQueue();
 		void OnClose();
 	private:
 		bool m_IsRunning = true;
@@ -53,8 +70,11 @@ namespace Quelos
 
 		float m_LastFrameTime = 0.0f;
 
+		std::vector<std::function<void()>> m_MainThreadQueue;
+		std::mutex m_MainThreadQueueMutex;
+	private:
 		static Application* s_Instance;
 	};
 
-	Application* CreateApplication();
+	Application* CreateApplication(const ApplicationCommandLineArgs& applicationSpec);
 }

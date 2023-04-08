@@ -4,13 +4,13 @@ namespace Sandbox
 {
     public class Player : Entity
     {
-        private float m_Speed = 20f;
+        public float Speed = 20f;
+        public float Time;
 
         private Rigidbody2DComponent m_Rigidbody;
 
         private void OnStart()
         {
-            InternalCalls.NativeLog($"Player.OnCreate - {ID}");
             m_Rigidbody = GetComponent<Rigidbody2DComponent>();
         }
 
@@ -23,8 +23,10 @@ namespace Sandbox
             if (Input.GetKey(KeyCode.A))
                 velocity.X = -1f;
 
-            velocity *= m_Speed * ts;
+            velocity *= Speed * ts;
             m_Rigidbody.ApplyLinearImpulse(velocity);
+
+            Time += ts; 
         }
     }
 }

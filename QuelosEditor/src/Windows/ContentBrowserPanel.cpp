@@ -5,10 +5,8 @@
 
 namespace Quelos
 {
-	const extern std::filesystem::path g_AssetsPath;
-
 	ContentBrowserPanel::ContentBrowserPanel()
-		: m_CurrentDirectory(g_AssetsPath), m_Inspector(*InspectorPanel::Get())
+		: m_Inspector(*InspectorPanel::Get())
 	{
 		m_DirectoryIcon = Texture2D::Create("Resources/Icons/ContentBrowser/FolderIcon.png",
 											{ TextureFilterMode::Tilinear, TextureWrapMode::Repeat });
@@ -32,8 +30,12 @@ namespace Quelos
 
 			if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
 			{
-				if (dir.path().extension().string() == ".png")
-					m_Inspector.SetSelectedTexture(AssetsManager::GetTexture(dir.path().string()));
+				auto path = dir.path();
+				if (path.extension().string() == ".png")
+				{
+					auto relativePath = std::filesystem::relative(path, AssetsManager::GetAssetsPath());
+					m_Inspector.SetSelectedTexture(AssetsManager::GetTexture(relativePath.string()));
+				}
 			}
 
 			if (ImGui::BeginDragDropSource())
@@ -45,6 +47,12 @@ namespace Quelos
 
 			ImGui::TreePop();
 		}
+	}
+
+	void ContentBrowserPanel::SetAssetsPath(const std::filesystem::path& path)
+	{
+		m_AssetsDirectory = path;
+		m_CurrentDirectory = m_AssetsDirectory;
 	}
 
 	void ContentBrowserPanel::OnImGuiRender()
@@ -85,7 +93,7 @@ namespace Quelos
 					std::vector<std::filesystem::path> nextDirectories;
 					std::vector<std::filesystem::path> curDirectories;
 
-					for (auto& path : std::filesystem::directory_iterator(g_AssetsPath))
+					for (auto& path : std::filesystem::directory_iterator(m_AssetsDirectory))
 						DrawNode(path);
 
 					ImGui::TreePop();
@@ -95,7 +103,7 @@ namespace Quelos
 
 				if (ImGui::ImageButton((ImTextureID)m_BackButtonIcon->GetRendererID(), { size, size }))
 				{
-					if (m_CurrentDirectory != std::filesystem::path(g_AssetsPath))
+					if (m_CurrentDirectory != std::filesystem::path(m_AssetsDirectory))
 						m_CurrentDirectory = m_CurrentDirectory.parent_path();
 				}
 
@@ -121,14 +129,14 @@ namespace Quelos
 
 						ImGui::TableNextColumn();
 
-						auto relativePath = std::filesystem::relative(path, g_AssetsPath);
+						auto relativePath = std::filesystem::relative(path, m_AssetsDirectory);
 						std::string filenameString = relativePath.filename().string();
 
 						ImGui::PushID(filenameString.c_str());
 
 						Ref<Texture2D> icon;
 						if (relativePath.extension() == ".png")
-							icon = AssetsManager::GetTexture(path.string());
+							icon = AssetsManager::GetTexture(relativePath.string());
 						else icon = directoryEntry.is_directory() ? m_DirectoryIcon : m_FileIcon;
 
 						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
@@ -147,7 +155,7 @@ namespace Quelos
 							if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
 							{
 								if (path.extension() == ".png")
-									m_Inspector.SetSelectedTexture(AssetsManager::GetTexture(path.string()));
+									m_Inspector.SetSelectedTexture(AssetsManager::GetTexture(relativePath.string()));
 							}
 
 							if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))

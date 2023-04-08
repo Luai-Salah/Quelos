@@ -19,7 +19,7 @@ namespace Quelos
 		char* cStr = mono_string_to_utf8(text);
 		std::string msg(cStr);
 
-		QS_CORE_LOG(msg);
+		QS_CORE_INFO(msg);
 
 		mono_free(cStr);
 	}
@@ -38,6 +38,27 @@ namespace Quelos
 			"Managed type wasn't found!");
 
 		return s_EntityHasComponentFuncs[managedType](entity);
+	}
+
+	static uint64_t Entity_FindEntityByName(MonoString* nameMonoString)
+	{
+		char* entityNameCStr = mono_string_to_utf8(nameMonoString);
+
+		Scene* scene = ScriptEngine::GetSceneContext();
+		QS_CORE_ASSERT(scene, "Scene is null!");
+
+		Entity entity = scene->FindEntityByName(entityNameCStr);
+		mono_free(entityNameCStr);
+
+		if (!entity)
+			return 0;
+
+		return entity.GetGUID();
+	}
+
+	static MonoObject* Entity_GetScriptInstance(GUID entityID)
+	{
+		return ScriptEngine::GetManagedInstance(entityID);
 	}
 
 	static void TransformComponent_GetPosition(GUID guid, Vector3* outPosition)
@@ -104,6 +125,7 @@ namespace Quelos
 
 	void ScriptGlue::RegisterComponents()
 	{
+		s_EntityHasComponentFuncs.clear();
 		RegisterComponent(AllComponents{ });
 	}
 
@@ -112,6 +134,8 @@ namespace Quelos
 		QS_ADD_INTERNAL_CALL(NativeLog);
 
 		QS_ADD_INTERNAL_CALL(Entity_HasComponent);
+		QS_ADD_INTERNAL_CALL(Entity_FindEntityByName);
+		QS_ADD_INTERNAL_CALL(Entity_GetScriptInstance);
 
 		QS_ADD_INTERNAL_CALL(TransformComponent_GetPosition);
 		QS_ADD_INTERNAL_CALL(TransformComponent_SetPosition);

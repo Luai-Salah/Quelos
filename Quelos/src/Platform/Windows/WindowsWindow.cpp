@@ -38,12 +38,11 @@ namespace Quelos
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 
-		const char* format =
-R"(Createing Window:
-	Title: {}
-	Size: ({}, {}))";
-
-		//QS_CORE_LOG(format, m_Data.Title.c_str(), (int)m_Data.Width, (int)m_Data.Height);
+		QS_CORE_INFO("Createing Window :\n\tTitle: {0}\n\tSize: ({1}, {2})",
+			m_Data.Title.c_str(),
+			(int)m_Data.Width,
+			(int)m_Data.Height
+		);
 
 		if (s_GLFWWindowCount == 0)
 		{
