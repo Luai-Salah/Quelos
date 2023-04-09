@@ -6,7 +6,7 @@
 
 namespace Quelos
 {
-	class EditorGui
+	class EditorGUI
 	{
 	public:
 		static bool CheckBox(const std::string& label, bool& value);

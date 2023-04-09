@@ -18,7 +18,7 @@ namespace Quelos
         ProjectSerializer serializer(project);
         if (serializer.Deserialize(path))
         {
-            project->m_ActiveProjectDirectory = path.parent_path();
+            project->m_ProjectDirectory = path.parent_path();
             s_ActiveProject = project;
             return s_ActiveProject;
         }
@@ -29,15 +29,10 @@ namespace Quelos
     bool Project::SaveActive(const std::filesystem::path& path)
     {
         ProjectSerializer serializer(s_ActiveProject);
-        if (serializer.Serialize(path))
+        if (!serializer.Serialize(path))
             return false;
 
-        s_ActiveProject->m_ActiveProjectDirectory = path.parent_path();
+        s_ActiveProject->m_ProjectDirectory = path.parent_path();
         return true;
-    }
-
-    std::filesystem::path Project::GetAssetDirectory()
-    {
-       return m_ActiveProjectDirectory / m_Configuration.AssetDirectory;
     }
 }

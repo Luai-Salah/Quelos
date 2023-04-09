@@ -16,11 +16,15 @@ namespace Quelos
 		std::unordered_map<std::string, std::filesystem::directory_entry> Directories;
 	};
 
-	static AssetsManagerData s_Data;
+	static Scope<AssetsManagerData> s_Data;
 
 	void AssetsManager::Init(const std::filesystem::path& assetsPath)
 	{
-		s_Data.AssetsPath = assetsPath;
+		if (assetsPath.empty())
+			return;
+
+		s_Data = CreateScope<AssetsManagerData>();
+		s_Data->AssetsPath = assetsPath;
 		UpdateAssetsFolder();
 	}
 
@@ -70,17 +74,17 @@ namespace Quelos
 		std::vector<std::filesystem::path> nextDirectories;
 		std::vector<std::filesystem::path> curDirectories;
 
-		s_Data.Directories["Assets"] = std::filesystem::directory_entry(s_Data.AssetsPath);
+		s_Data->Directories["Assets"] = std::filesystem::directory_entry(s_Data->AssetsPath);
 
-		for (auto& directoryEntry : std::filesystem::directory_iterator(s_Data.AssetsPath))
+		for (auto& directoryEntry : std::filesystem::directory_iterator(s_Data->AssetsPath))
 		{
 			const auto& path = directoryEntry.path();
 
-			auto relativePath = std::filesystem::relative(path, s_Data.AssetsPath);
+			auto relativePath = std::filesystem::relative(path, s_Data->AssetsPath);
 
 			if (directoryEntry.is_directory())
 			{
-				s_Data.Directories[relativePath.string()] = directoryEntry;
+				s_Data->Directories[relativePath.string()] = directoryEntry;
 				nextDirectories.push_back(directoryEntry.path());
 				dirCount++;
 			}
@@ -88,13 +92,13 @@ namespace Quelos
 			{
 				if (relativePath.extension() == ".png")
 				{
-					s_Data.Textures[relativePath.string()] = Texture2D::Create(path);
+					s_Data->Textures[relativePath.string()] = Texture2D::Create(path);
 					if (!std::filesystem::exists(path.string() + ".qsd"))
-						SerializeAsset(s_Data.Textures[relativePath.string()]);
-					else DeserializeAsset(s_Data.Textures[relativePath.string()], path.string() + ".qsd");
+						SerializeAsset(s_Data->Textures[relativePath.string()]);
+					else DeserializeAsset(s_Data->Textures[relativePath.string()], path.string() + ".qsd");
 				}
 				if (relativePath.extension() == ".quelos")
-					s_Data.Scenes[relativePath.string()] = path;
+					s_Data->Scenes[relativePath.string()] = path;
 				if (relativePath.extension() == ".qsd")
 				{
 
@@ -115,12 +119,12 @@ namespace Quelos
 				{
 					const auto& path = directoryEntry.path();
 
-					auto relativePath = std::filesystem::relative(path, s_Data.AssetsPath);
+					auto relativePath = std::filesystem::relative(path, s_Data->AssetsPath);
 					std::string filenameString = relativePath.filename().string();
 
 					if (directoryEntry.is_directory())
 					{
-						s_Data.Directories[relativePath.string()] = directoryEntry;
+						s_Data->Directories[relativePath.string()] = directoryEntry;
 						nextDirectories.push_back(directoryEntry.path());
 						dirCount++;
 					}
@@ -128,22 +132,42 @@ namespace Quelos
 					{
 						if (relativePath.extension() == ".png")
 						{
-							s_Data.Textures[relativePath.string()] = Texture2D::Create(path);
+							s_Data->Textures[relativePath.string()] = Texture2D::Create(path);
 							if (!std::filesystem::exists(path.string() + ".qsd"))
-								SerializeAsset(s_Data.Textures[relativePath.string()]);
-							else DeserializeAsset(s_Data.Textures[relativePath.string()], path.string() + ".qsd");
+								SerializeAsset(s_Data->Textures[relativePath.string()]);
+							else DeserializeAsset(s_Data->Textures[relativePath.string()], path.string() + ".qsd");
 						}
 						if (relativePath.extension() == ".quelos")
-							s_Data.Scenes[relativePath.string()] = path;
+							s_Data->Scenes[relativePath.string()] = path;
 					}
 				}
 			}
 		}
 	}
 
-	const Ref<Texture2D>& AssetsManager::GetTexture(std::string name) { return s_Data.Textures[name]; }
+	const Ref<Texture2D>& AssetsManager::GetTexture(std::string name)
+	{
+		auto it = s_Data->Textures.find(name);
+		if (it == s_Data->Textures.end())
+			return nullptr;
 
-	std::filesystem::path AssetsManager::GetScene(std::string name) { return s_Data.Scenes[name]; }
-	std::filesystem::path AssetsManager::GetAssetsPath() { return s_Data.AssetsPath; }
-	std::filesystem::directory_entry AssetsManager::GetDirectories(std::string name) { return s_Data.Directories[name]; }
+		return it->second;
+	}
+
+	std::filesystem::path AssetsManager::GetScene(std::string name)
+	{
+		auto it = s_Data->Scenes.find(name);
+		if (it == s_Data->Scenes.end())
+			return "";
+
+		return it->second;
+	}
+	std::filesystem::directory_entry AssetsManager::GetDirectories(std::string name)
+	{
+		auto it = s_Data->Directories.find(name);
+		if (it == s_Data->Directories.end())
+			return std::filesystem::directory_entry("");
+
+		return it->second;
+	}
 }

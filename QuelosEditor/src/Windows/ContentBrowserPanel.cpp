@@ -33,7 +33,7 @@ namespace Quelos
 				auto path = dir.path();
 				if (path.extension().string() == ".png")
 				{
-					auto relativePath = std::filesystem::relative(path, AssetsManager::GetAssetsPath());
+					auto relativePath = std::filesystem::relative(path, m_AssetsDirectory);
 					m_Inspector.SetSelectedTexture(AssetsManager::GetTexture(relativePath.string()));
 				}
 			}
@@ -87,16 +87,19 @@ namespace Quelos
 				ImGui::TableSetupColumn("##browse", ImGuiTableColumnFlags_WidthStretch, ImGui::GetWindowWidth() * 2.0f / 3.0f);
 				ImGui::TableNextColumn();
 
-				if (ImGui::TreeNode("Assets"))
+				if (!m_AssetsDirectory.empty())
 				{
-					int dirCount = 0;
-					std::vector<std::filesystem::path> nextDirectories;
-					std::vector<std::filesystem::path> curDirectories;
+					if (ImGui::TreeNode("Assets"))
+					{
+						int dirCount = 0;
+						std::vector<std::filesystem::path> nextDirectories;
+						std::vector<std::filesystem::path> curDirectories;
 
-					for (auto& path : std::filesystem::directory_iterator(m_AssetsDirectory))
-						DrawNode(path);
+						for (auto& path : std::filesystem::directory_iterator(m_AssetsDirectory))
+							DrawNode(path);
 
-					ImGui::TreePop();
+						ImGui::TreePop();
+					}
 				}
 
 				ImGui::TableNextColumn();
@@ -121,55 +124,58 @@ namespace Quelos
 
 				if (ImGui::BeginTable("table2", columnCount, 0, { 0.0f, ImGui::GetContentRegionAvail().y - 4.0f }))
 				{
-					for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
+					if (!m_AssetsDirectory.empty())
 					{
-						const auto& path = directoryEntry.path();
-						if (path.extension() == ".qsd")
-							continue;
-
-						ImGui::TableNextColumn();
-
-						auto relativePath = std::filesystem::relative(path, m_AssetsDirectory);
-						std::string filenameString = relativePath.filename().string();
-
-						ImGui::PushID(filenameString.c_str());
-
-						Ref<Texture2D> icon;
-						if (relativePath.extension() == ".png")
-							icon = AssetsManager::GetTexture(relativePath.string());
-						else icon = directoryEntry.is_directory() ? m_DirectoryIcon : m_FileIcon;
-
-						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-						ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
-						ImGui::PopStyleColor();
-
-						if (ImGui::BeginDragDropSource())
+						for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 						{
-							const wchar_t* itemPath = path.c_str();
-							ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t), ImGuiCond_Once);
-							ImGui::EndDragDropSource();
-						}
+							const auto& path = directoryEntry.path();
+							if (path.extension() == ".qsd")
+								continue;
 
-						if (ImGui::IsItemHovered())
-						{
-							if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+							ImGui::TableNextColumn();
+
+							auto relativePath = std::filesystem::relative(path, m_AssetsDirectory);
+							std::string filenameString = relativePath.filename().string();
+
+							ImGui::PushID(filenameString.c_str());
+
+							Ref<Texture2D> icon;
+							if (relativePath.extension() == ".png")
+								icon = AssetsManager::GetTexture(relativePath.string());
+							else icon = directoryEntry.is_directory() ? m_DirectoryIcon : m_FileIcon;
+
+							ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+							ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+							ImGui::PopStyleColor();
+
+							if (ImGui::BeginDragDropSource())
 							{
-								if (path.extension() == ".png")
-									m_Inspector.SetSelectedTexture(AssetsManager::GetTexture(relativePath.string()));
+								const wchar_t* itemPath = relativePath.c_str();
+								ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t), ImGuiCond_Once);
+								ImGui::EndDragDropSource();
 							}
 
-							if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+							if (ImGui::IsItemHovered())
 							{
-								if (directoryEntry.is_directory())
-									m_CurrentDirectory /= path.filename();
+								if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+								{
+									if (path.extension() == ".png")
+										m_Inspector.SetSelectedTexture(AssetsManager::GetTexture(relativePath.string()));
+								}
+
+								if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+								{
+									if (directoryEntry.is_directory())
+										m_CurrentDirectory /= path.filename();
+								}
 							}
+
+							ImGui::TextWrapped(filenameString.c_str());
+
+							ImGui::NextColumn();
+
+							ImGui::PopID();
 						}
-
-						ImGui::TextWrapped(filenameString.c_str());
-
-						ImGui::NextColumn();
-
-						ImGui::PopID();
 					}
 
 					ImGui::EndTable();

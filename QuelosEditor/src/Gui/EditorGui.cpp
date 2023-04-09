@@ -1,5 +1,5 @@
 #include "QSPCH.h"
-#include "EditorGui.h"
+#include "EditorGUI.h"
 
 #include "Quelos/Core/AssetsManager.h"
 #include "Quelos/Scene/Entity.h"
@@ -13,7 +13,7 @@ namespace Quelos
 {
 	const extern std::filesystem::path g_AssetsPath;
 
-	bool EditorGui::CheckBox(const std::string& label, bool& value)
+	bool EditorGUI::CheckBox(const std::string& label, bool& value)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -44,7 +44,7 @@ namespace Quelos
 		return used;
 	}
 
-	bool EditorGui::InputFloat(const std::string& label, float& value, float speed, float min, float max, float columWidth)
+	bool EditorGUI::InputFloat(const std::string& label, float& value, float speed, float min, float max, float columWidth)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -74,7 +74,7 @@ namespace Quelos
 		return used;
 	}
 
-	bool EditorGui::InputVector2(const std::string& label, Vector2& values, float resetValue, float speed, float min, float max)
+	bool EditorGUI::InputVector2(const std::string& label, Vector2& values, float resetValue, float speed, float min, float max)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -142,7 +142,7 @@ namespace Quelos
 		return used;
 	}
 
-	void EditorGui::InputVector3(const std::string& label, Vector3& values, float resetValue, float columWidth)
+	void EditorGUI::InputVector3(const std::string& label, Vector3& values, float resetValue, float columWidth)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -224,7 +224,7 @@ namespace Quelos
 		ImGui::Spacing();
 	}
 
-	bool EditorGui::InputColor4(const std::string& label, Vector4& values, float resetValue)
+	bool EditorGUI::InputColor4(const std::string& label, Vector4& values, float resetValue)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -254,7 +254,7 @@ namespace Quelos
 		return used;
 	}
 
-	bool EditorGui::BeginCombo(const std::string& label, const char* previewValue)
+	bool EditorGUI::BeginCombo(const std::string& label, const char* previewValue)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -270,13 +270,13 @@ namespace Quelos
 		return ImGui::BeginCombo((std::string("##") + label).c_str(), previewValue);
 	}
 
-	void EditorGui::EndCombo()
+	void EditorGUI::EndCombo()
 	{
 		ImGui::EndCombo();
 		ImGui::PopItemWidth();
 	}
 
-	bool EditorGui::BeginComponent(const std::string& name, bool* remove)
+	bool EditorGUI::BeginComponent(const std::string& name, bool* remove)
 	{
 		ImVec2 contentRegionAvail = ImGui::GetContentRegionAvail();
 
@@ -314,7 +314,7 @@ namespace Quelos
 		return opened;
 	}
 
-	void EditorGui::EndComponent(bool remove, std::function<void()> fn)
+	void EditorGUI::EndComponent(bool remove, std::function<void()> fn)
 	{
 		ImGui::TreePop();
 
@@ -324,7 +324,7 @@ namespace Quelos
 			fn();
 	}
 
-	void EditorGui::TextureSlot(const char* label, Ref<SubTexture2D>& subTexture)
+	void EditorGUI::TextureSlot(const char* label, Ref<SubTexture2D>& subTexture)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -363,7 +363,7 @@ namespace Quelos
 		ImGui::Spacing();
 	}
 
-	void EditorGui::EntitySlot(const char* label, entt::entity& entityID)
+	void EditorGUI::EntitySlot(const char* label, entt::entity& entityID)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -397,7 +397,7 @@ namespace Quelos
 		ImGui::Spacing();
 	}
 
-	void EditorGui::TextureSlot(const char* label, Ref<Texture2D>& texture)
+	void EditorGUI::TextureSlot(const char* label, Ref<Texture2D>& texture)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -436,7 +436,7 @@ namespace Quelos
 		ImGui::Spacing();
 	}
 
-	bool EditorGui::Button(const std::string& label, bool enabled)
+	bool EditorGUI::Button(const std::string& label, bool enabled)
 	{
 		if (enabled)
 			return ImGui::Button(label.c_str(), { ImGui::GetContentRegionAvail().x, 0 });

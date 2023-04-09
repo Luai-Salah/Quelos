@@ -13,7 +13,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\EditorLayer.h" />
-    <ClInclude Include="src\Gui\EditorGui.h">
+    <ClInclude Include="src\GUI\EditorGUI.h">
       <Filter>Gui</Filter>
     </ClInclude>
     <ClInclude Include="src\Lighting\LightingLayer.h">
@@ -37,7 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
-    <ClCompile Include="src\Gui\EditorGui.cpp">
+    <ClCompile Include="src\GUI\EditorGUI.cpp">
       <Filter>Gui</Filter>
     </ClCompile>
     <ClCompile Include="src\Lighting\LightingLayer.cpp">

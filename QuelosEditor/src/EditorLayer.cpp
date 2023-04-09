@@ -5,7 +5,7 @@
 #include "Quelos/Core/Application.h"
 #include "Quelos/Scripting/ScriptEngine.h"
 
-#include "Gui/EditorGui.h"
+#include "Gui/EditorGUI.h"
 
 #include <ImGuizmo.h>
 #include <glm/glm.hpp>
@@ -261,7 +261,7 @@ namespace Quelos
                 ImGui::End();
             else
             {
-                EditorGui::CheckBox("Show Physics Colliders", m_ShowPhysicsColliders);
+                EditorGUI::CheckBox("Show Physics Colliders", m_ShowPhysicsColliders);
                 ImGui::End();
             }
         }
@@ -367,7 +367,7 @@ namespace Quelos
                         const std::filesystem::path path(wpath);
 
                         if (path.extension() == ".quelos")
-                            OpenScene(path);
+                            OpenScene(Project::GetAssetFileSystemPath(path));
                         else if (path.extension() == ".png" || path.extension() == ".jpg")
                         {
                             Entity e = m_ActiveScene->CreateEntity(path.stem().string());
@@ -432,8 +432,8 @@ namespace Quelos
         else
         {
             //ImGui::Text("Light:");
-            //EditorGui::InputVector3("   Position", m_LightPosition);
-            //EditorGui::InputColor4("Object Color: ", m_Material.Ambient);
+            //EditorGUI::InputVector3("   Position", m_LightPosition);
+            //EditorGUI::InputColor4("Object Color: ", m_Material.Ambient);
 
             //std::string name = "None";
             //if (m_HoveredEntity)
@@ -777,12 +777,11 @@ namespace Quelos
     {
         if (Ref<Project> project = Project::Load(path))
         {
-            std::filesystem::path assetsPath = project->GetAssetDirectory();
+            std::filesystem::path assetsPath = Project::GetAssetDirectory();
             AssetsManager::Init(assetsPath);
             m_ContentBrowserPanel.SetAssetsPath(assetsPath);
 
-            auto scenePath = assetsPath / Project::GetActiveProject()->GetConfig().StartScene;
-            OpenScene(scenePath);
+            OpenScene(Project::GetAssetFileSystemPath(Project::GetActiveProject()->GetConfig().StartScene));
         }
     }
 

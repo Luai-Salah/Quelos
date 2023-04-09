@@ -1,5 +1,5 @@
 #include "LightingLayer.h"
-#include "..\Gui\EditorGui.h"
+#include "..\Gui\EditorGUI.h"
 
 namespace Lighting
 {
@@ -135,7 +135,7 @@ namespace Lighting
 	{
         if (ImGui::Begin("Lighting"))
         {
-            EditorGui::InputVector3("Light Position", m_LightPosition);
+            EditorGUI::InputVector3("Light Position", m_LightPosition);
 
             ImGui::End();
         } else ImGui::End();

@@ -1,5 +1,5 @@
 #include "SceneHierarchyPanal.h"
-#include "../Gui/EditorGui.h"
+#include "../Gui/EditorGUI.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>

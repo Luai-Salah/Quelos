@@ -136,7 +136,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\EditorLayer.h" />
-    <ClInclude Include="src\Gui\EditorGui.h" />
+    <ClInclude Include="src\GUI\EditorGUI.h" />
     <ClInclude Include="src\Lighting\LightingLayer.h" />
     <ClInclude Include="src\Windows\ConsolePanal.h" />
     <ClInclude Include="src\Windows\ContentBrowserPanel.h" />
@@ -146,7 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\EditorLayer.cpp" />
-    <ClCompile Include="src\Gui\EditorGui.cpp" />
+    <ClCompile Include="src\GUI\EditorGUI.cpp" />
     <ClCompile Include="src\Lighting\LightingLayer.cpp" />
     <ClCompile Include="src\QuelosEditorApp.cpp" />
     <ClCompile Include="src\Windows\ContentBrowserPanel.cpp" />
