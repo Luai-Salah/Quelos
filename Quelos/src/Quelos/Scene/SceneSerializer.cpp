@@ -300,10 +300,13 @@ namespace Quelos
 			out << YAML::Key << "SpriteRendererComponent";
 			out << YAML::BeginMap; // SpriteRendererComponent
 
-			auto spriteRenderer = entity.GetComponent<SpriteRendererComponent>();
+			const auto& spriteRenderer = entity.GetComponent<SpriteRendererComponent>();
 			out << YAML::Key << "Color" << YAML::Value << spriteRenderer.Color;
 			if (spriteRenderer.Texture != nullptr)
-				out << YAML::Key << "TexturePath" << YAML::Value << spriteRenderer.Texture->GetTexture()->GetPath().string();
+			{
+				std::string path = AssetsManager::GetRelativePath(spriteRenderer.Texture->GetTexture()->GetPath()).string();
+				out << YAML::Key << "TexturePath" << YAML::Value << path;
+			}
 			out << YAML::Key << "TilingFactor" << YAML::Value << spriteRenderer.TilingFactor;
 
 			out << YAML::EndMap; // SpriteRendererComponent

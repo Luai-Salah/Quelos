@@ -170,4 +170,9 @@ namespace Quelos
 
 		return it->second;
 	}
+
+	std::filesystem::path AssetsManager::GetRelativePath(const std::filesystem::path& path)
+	{
+		return std::filesystem::relative(path, s_Data->AssetsPath);
+	}
 }

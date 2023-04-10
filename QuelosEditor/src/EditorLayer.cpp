@@ -142,26 +142,6 @@ namespace Quelos
         const bool control = Input::GetKey(KeyCode::LeftControl) || Input::GetKey(KeyCode::RightControl);
         const bool shift = Input::GetKey(KeyCode::LeftShift) || Input::GetKey(KeyCode::RightShift);
 
-        if (Input::GetKeyDown(KeyCode::S))
-        {
-            if (control)
-            {
-                if (shift)
-                    SaveSceneAs();
-                else SaveScene();
-            }
-        }
-        if (Input::GetKeyDown(KeyCode::N))
-        {
-            if (control)
-                NewScene();
-        }
-        if (Input::GetKeyDown(KeyCode::O))
-        {
-            if (control)
-                OpenScene();
-        }
-
         m_SpriteEditorWindow.OnUpdate(ts);
     }
 
@@ -273,16 +253,18 @@ namespace Quelos
         {
             if (ImGui::BeginMenu("File"))
             {
-                if (ImGui::MenuItem("New", "Ctrl+N"))
+                if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
+                    OpenProject();
+
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("New Scene", "Ctrl+N"))
                     NewScene();
 
-                if (ImGui::MenuItem("Open...", "Ctrl+O"))
-                    OpenScene();
-
-                if (ImGui::MenuItem("Save", "Ctrl+S"))
+                if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
                     SaveScene();
 
-                if (ImGui::MenuItem("Save as...", "Ctrl+Shift+S"))
+                if (ImGui::MenuItem("Save Scene as...", "Ctrl+Shift+S"))
                     SaveSceneAs();
 
                 ImGui::Separator();
@@ -357,7 +339,6 @@ namespace Quelos
 
                 m_ViewportFocused = ImGui::IsWindowFocused();
                 m_ViewportHovered = ImGui::IsWindowHovered();
-                Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
 
                 if (ImGui::BeginDragDropTarget())
                 {
@@ -640,6 +621,36 @@ namespace Quelos
                 return false;
 
             const bool control = Input::GetKey(KeyCode::LeftControl) || Input::GetKey(KeyCode::RightControl);
+            const bool shift = Input::GetKey(KeyCode::LeftShift) || Input::GetKey(KeyCode::RightShift);
+
+            switch (e.GetKeyCode())
+            {
+                case KeyCode::O:
+                {
+                    if (control)
+                        OpenProject();
+                    break;
+                }
+                case KeyCode::S:
+                {
+                    if (control)
+                    {
+                        if (shift)
+                            SaveSceneAs();
+                        else SaveScene();
+                    }
+                    break;
+                }
+                case KeyCode::N:
+                {
+                    if (control)
+                        NewScene();
+                    break;
+                }
+            }
+
+            if (!m_ViewportFocused && !m_ViewportHovered)
+                return false;
 
             switch (e.GetKeyCode())
             {
@@ -649,17 +660,11 @@ namespace Quelos
                         OnDuplicateEntity();
                     break;
                 }
-                case KeyCode::Delete:
-                {
-
-                    break;
-                }
-
                 case KeyCode::Q:
                 {
                     if (!ImGuizmo::IsUsing())
                         m_GizmoType = -1;
-                    
+
                     break;
                 }
                 case KeyCode::W:
@@ -689,9 +694,11 @@ namespace Quelos
                 {
                     if (!ImGuizmo::IsUsing())
                         m_GizmoType = ImGuizmo::OPERATION::BOUNDS;
-                    
+
                     break;
                 }
+                default:
+                    break;
             }
 
             return false;
@@ -743,7 +750,6 @@ namespace Quelos
 
                 m_EditorScene->OnViewportResize(static_cast<uint32_t>(m_ViewportSize.x), static_cast<uint32_t>(m_ViewportSize.y));
                 m_HierarchyPanel.SetContext(m_EditorScene);
-                Application::GetWindow().SetTitle("Quelos Editor - " + path.stem().string());
 
                 m_ActiveScene = m_EditorScene;
                 m_EditorScenePath = path;
@@ -773,15 +779,26 @@ namespace Quelos
         Project::New();
     }
 
+    void EditorLayer::OpenProject()
+    {
+        const std::string projectPath = FileDialogs::OpenFile("Quelos Scene (*.qproj)\0*.qproj\0");
+        OpenProject(projectPath);
+    }
+
     void EditorLayer::OpenProject(const std::filesystem::path& path)
     {
+        if (path.empty())
+            return;
+
         if (Ref<Project> project = Project::Load(path))
         {
             std::filesystem::path assetsPath = Project::GetAssetDirectory();
             AssetsManager::Init(assetsPath);
             m_ContentBrowserPanel.SetAssetsPath(assetsPath);
 
-            OpenScene(Project::GetAssetFileSystemPath(Project::GetActiveProject()->GetConfig().StartScene));
+            std::filesystem::path scenePath = Project::GetAssetFileSystemPath(Project::GetActiveProject()->GetConfig().StartScene);
+            OpenScene(scenePath);
+            Application::GetWindow().SetTitle("Quelos Editor - " + path.stem().string() + " - " + scenePath.stem().string());
         }
     }
 

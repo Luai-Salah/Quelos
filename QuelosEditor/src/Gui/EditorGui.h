@@ -10,6 +10,7 @@ namespace Quelos
 	{
 	public:
 		static bool CheckBox(const std::string& label, bool& value);
+		static bool InputText(const std::string& label, std::string& text, const Vector4& textColor);
 		static bool InputFloat(const std::string& label, float& value, float speed = 0.1f, float min = 0.0f, float max = 0.0f, float columWidth = 100.0f);
 		static bool InputVector2(const std::string& label, Vector2& values, float resetValue = 0.0f, float speed = 0.1f, float min = 0.0f, float max = 0.0f);
 		static void InputVector3(const std::string& label, Vector3& values, float resetValue = 0.0f, float columWidth = 100.0f);

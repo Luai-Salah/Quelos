@@ -44,6 +44,46 @@ namespace Quelos
 		return used;
 	}
 
+	bool EditorGUI::InputText(const std::string& label, std::string& text, const Vector4& textColor = Vector4{ 0 })
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		auto boldFont = io.Fonts->Fonts[0];
+
+		ImGui::PushID(label.c_str());
+
+		ImGui::Spacing();
+
+		ImGui::Columns(2, nullptr, false);
+
+		ImGui::SetColumnWidth(0, ImGui::GetWindowWidth() / 3.0f);
+		ImGui::Text(label.c_str());
+		ImGui::NextColumn();
+
+		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
+		if (textColor != Vector4{0})
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(textColor.x, textColor.y, textColor.z, textColor.w));
+
+		static char buffer[64];
+		strcpy_s(buffer, sizeof(buffer), text.c_str());
+
+		bool used = ImGui::InputText(("##" + label).c_str(), buffer, sizeof(buffer));
+		if (used)
+			text = buffer;
+
+		ImGui::PopItemWidth();
+		ImGui::PopStyleVar();
+		if (textColor != Vector4 { 0 })
+			ImGui::PopStyleColor();
+		ImGui::Columns(1);
+
+		ImGui::Spacing();
+
+		ImGui::PopID();
+
+		return used;
+	}
+
 	bool EditorGUI::InputFloat(const std::string& label, float& value, float speed, float min, float max, float columWidth)
 	{
 		ImGuiIO& io = ImGui::GetIO();

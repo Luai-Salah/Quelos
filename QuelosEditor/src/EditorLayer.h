@@ -32,6 +32,7 @@ namespace Quelos
 		void SaveScene();
 
 		void NewProject();
+		void OpenProject();
 		void OpenProject(const std::filesystem::path& path);
 		void SaveProject();
 

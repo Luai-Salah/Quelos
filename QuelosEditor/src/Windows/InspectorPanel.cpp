@@ -222,13 +222,8 @@ namespace Quelos
 		{
 			bool scriptExists = ScriptEngine::EntityClassExists(sc.ClassName);
 
-			static char buffer[64];
-			strcpy_s(buffer, sizeof(buffer), sc.ClassName.c_str());
-
-			if (!scriptExists)
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.9f, 0.2f, 0.2f, 1.0f));
-			if (ImGui::InputText("Class", buffer, sizeof(buffer)))
-				sc.ClassName = buffer;
+			if (EditorGUI::InputText("Class", sc.ClassName, !scriptExists ? Vector4 {0.9f, 0.2f, 0.2f, 1.0f} : Vector4{ 0 }))
+				return;
 
 			// Fields
 			if (scene->IsRunning())
@@ -286,9 +281,6 @@ namespace Quelos
 					}
 				}
 			}
-
-			if (!scriptExists)
-				ImGui::PopStyleColor();
 		});
 
 		EditorGUI::Component<CircleRendererComponent>("Circle Renderer", entity, [](Entity entity, CircleRendererComponent& cr)

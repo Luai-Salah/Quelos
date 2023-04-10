@@ -14,11 +14,12 @@ namespace Quelos
 
 		static void UpdateAssetsFolder();
 
-		static const Ref<Texture2D>& GetTexture(std::string name);
-
 		static void SerializeAsset(const Ref<Texture2D>& texture);
 
+		static const Ref<Texture2D>& GetTexture(std::string name);
 		static std::filesystem::path GetScene(std::string name);
 		static std::filesystem::directory_entry GetDirectories(std::string name);
+
+		static std::filesystem::path GetRelativePath(const std::filesystem::path& path);
 	};
 }
