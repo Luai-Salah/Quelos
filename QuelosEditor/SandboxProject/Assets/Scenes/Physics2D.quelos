@@ -1,12 +1,55 @@
 Scene: Physics2D
 Entites:
-  - EntityID: 2807889082778455125
+  - EntityID: 11908956828186690126
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Position: [9.97132492, -11.0960693, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 1
+        PresVerticalFOV: 0.785398185
+        PresNearClip: 0.00999999978
+        PresFarClip: 1000
+        OrthoSize: 30
+        OrthoNearClip: -1
+        OrthoFarClip: 1
+      Primary: true
+      TargetID: 1048575
+      FixedAspectRatio: false
+    ScriptComponent:
+      Name: Sandbox.Camera
+      ScriptFields:
+        []
+  - EntityID: 10133931684058251332
     TagComponent:
       Tag: Ground
     TransformComponent:
-      Position: [23.2091103, -21.1385555, 0]
-      Rotation: [0, 0, 0.643214524]
-      Scale: [8.04686642, 0.999999881, 1]
+      Position: [16.0985203, -11.500164, 0]
+      Rotation: [0, 0, 0.670206428]
+      Scale: [18.3000088, 0.999999583, 1]
+    SpriteRendererComponent:
+      Color: [0.0488365032, 0.972972989, 0.213860914, 1]
+      TilingFactor: 1
+    Rigidbody2DComponent:
+      BodyType: Static
+      FixedRotation: true
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.100000001
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - EntityID: 13954421819537099670
+    TagComponent:
+      Tag: Ground
+    TransformComponent:
+      Position: [-0.700242996, -21.2304668, 0]
+      Rotation: [0, 0, -0.63442713]
+      Scale: [8.04686737, 0.999999881, 1]
     SpriteRendererComponent:
       Color: [0.869498253, 0.972972989, 0.0488365032, 1]
       TilingFactor: 1
@@ -20,43 +63,29 @@ Entites:
       Friction: 1
       Restitution: 0
       RestitutionThreshold: 0.5
-  - EntityID: 2147618389855510621
+  - EntityID: 3540253370157868926
     TagComponent:
-      Tag: Ground
+      Tag: Player
     TransformComponent:
-      Position: [11.1299906, -23.4650078, 0]
+      Position: [-0.197205365, 2.44527221, 0]
       Rotation: [0, 0, 0]
-      Scale: [18.2999992, 0.999999762, 1]
+      Scale: [1, 1, 1]
+    ScriptComponent:
+      Name: Sandbox.Player
+      ScriptFields:
+        - Name: Speed
+          Type: Float
+          Data: 50
     SpriteRendererComponent:
-      Color: [0.869498253, 0.972972989, 0.0488365032, 1]
+      Color: [1, 1, 1, 1]
+      TexturePath: Textures\Checker.png
       TilingFactor: 1
-    Rigidbody2DComponent:
-      BodyType: Static
-      FixedRotation: true
-    BoxCollider2DComponent:
-      Offset: [0, 0]
-      Size: [0.5, 0.5]
-      Density: 1
-      Friction: 1
-      Restitution: 0
-      RestitutionThreshold: 0.5
-  - EntityID: 2485723795707181734
-    TagComponent:
-      Tag: Circle
-    TransformComponent:
-      Position: [-1.0974139, -1.61921597, 0]
-      Rotation: [0, 0, 0]
-      Scale: [2.53999972, 2.53999972, 2.53999972]
-    CircleRendererComponent:
-      Color: [0.799227834, 0.166634351, 0.166634351, 1]
-      Thickness: 0.100000001
-      Fade: 0.0199999996
     Rigidbody2DComponent:
       BodyType: Dynamic
       FixedRotation: false
-    CircleCollider2DComponent:
+    BoxCollider2DComponent:
       Offset: [0, 0]
-      Radius: 0.5
+      Size: [0.5, 0.5]
       Density: 1
       Friction: 0.5
       Restitution: 0
@@ -81,40 +110,34 @@ Entites:
       Friction: 0.100000001
       Restitution: 0
       RestitutionThreshold: 0.5
-  - EntityID: 3540253370157868926
+  - EntityID: 2485723795707181734
     TagComponent:
-      Tag: Player
+      Tag: Circle
     TransformComponent:
-      Position: [-0.197205365, 2.44527221, 0]
+      Position: [-1.0974139, -1.61921597, 0]
       Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    ScriptComponent:
-      Name: Sandbox.Player
-      ScriptFields:
-        - Name: Speed
-          Type: Float
-          Data: 20
-    SpriteRendererComponent:
-      Color: [1, 1, 1, 1]
-      TexturePath: Textures\Checker.png
-      TilingFactor: 1
+      Scale: [2.53999972, 2.53999972, 2.53999972]
+    CircleRendererComponent:
+      Color: [0.799227834, 0.166634351, 0.166634351, 1]
+      Thickness: 0.100000001
+      Fade: 0.0199999996
     Rigidbody2DComponent:
       BodyType: Dynamic
       FixedRotation: false
-    BoxCollider2DComponent:
+    CircleCollider2DComponent:
       Offset: [0, 0]
-      Size: [0.5, 0.5]
+      Radius: 0.5
       Density: 1
       Friction: 0.5
       Restitution: 0
       RestitutionThreshold: 0.5
-  - EntityID: 13954421819537099670
+  - EntityID: 2147618389855510621
     TagComponent:
       Tag: Ground
     TransformComponent:
-      Position: [-0.700242996, -21.2304668, 0]
-      Rotation: [0, 0, -0.63442713]
-      Scale: [8.04686737, 0.999999881, 1]
+      Position: [11.1299906, -23.4650078, 0]
+      Rotation: [0, 0, 0]
+      Scale: [18.2999992, 0.999999762, 1]
     SpriteRendererComponent:
       Color: [0.869498253, 0.972972989, 0.0488365032, 1]
       TilingFactor: 1
@@ -128,15 +151,15 @@ Entites:
       Friction: 1
       Restitution: 0
       RestitutionThreshold: 0.5
-  - EntityID: 10133931684058251332
+  - EntityID: 2807889082778455125
     TagComponent:
       Tag: Ground
     TransformComponent:
-      Position: [16.0985203, -11.500164, 0]
-      Rotation: [0, 0, 0.670206428]
-      Scale: [18.3000088, 0.999999583, 1]
+      Position: [23.2091103, -21.1385555, 0]
+      Rotation: [0, 0, 0.643214524]
+      Scale: [8.04686642, 0.999999881, 1]
     SpriteRendererComponent:
-      Color: [0.0488365032, 0.972972989, 0.213860914, 1]
+      Color: [0.869498253, 0.972972989, 0.0488365032, 1]
       TilingFactor: 1
     Rigidbody2DComponent:
       BodyType: Static
@@ -145,29 +168,6 @@ Entites:
       Offset: [0, 0]
       Size: [0.5, 0.5]
       Density: 1
-      Friction: 0.100000001
+      Friction: 1
       Restitution: 0
       RestitutionThreshold: 0.5
-  - EntityID: 11908956828186690126
-    TagComponent:
-      Tag: Camera
-    TransformComponent:
-      Position: [9.97132492, -11.0960693, 0]
-      Rotation: [0, 0, 0]
-      Scale: [1, 1, 1]
-    CameraComponent:
-      Camera:
-        ProjectionType: 1
-        PresVerticalFOV: 0.785398185
-        PresNearClip: 0.00999999978
-        PresFarClip: 1000
-        OrthoSize: 30
-        OrthoNearClip: -1
-        OrthoFarClip: 1
-      Primary: true
-      TargetID: 1048575
-      FixedAspectRatio: false
-    ScriptComponent:
-      Name: Sandbox.Camera
-      ScriptFields:
-        []

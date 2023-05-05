@@ -58,8 +58,8 @@ namespace Quelos
 		int width, height, channals;
 		stbi_set_flip_vertically_on_load(1);
 		{
-			QS_PROFILE_SCOPE("stbi_load->OpenGLTexture2D::OpenGLTexture2D(const std::string&)")
-				m_PixelData = stbi_load(m_Path.string().c_str(), &width, &height, &channals, 0);
+			QS_PROFILE_SCOPE("stbi_load->OpenGLTexture2D::OpenGLTexture2D(const std::string&)");
+			m_PixelData = stbi_load(m_Path.string().c_str(), &width, &height, &channals, 0);
 		}
 		QS_CORE_ASSERT(m_PixelData, "Failed to load image!");
 		m_Width = width;

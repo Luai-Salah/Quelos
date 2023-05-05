@@ -427,6 +427,10 @@ namespace Quelos
 
 		if (s_Data->EnableDebugging)
 		{
+			std::filesystem::path logs("Logs");
+			if (!std::filesystem::exists(logs))
+				std::filesystem::create_directory(logs);
+
 			const char* argv[2] = {
 				"--debugger-agent=transport=dt_socket,address=127.0.0.1:2550,server=y,suspend=n,loglevel=3,logfile=Logs/MonoDebugger.log",
 				"--soft-breakpoints"

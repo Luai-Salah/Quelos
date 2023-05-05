@@ -46,7 +46,7 @@ namespace Quelos
 
 		if (s_GLFWWindowCount == 0)
 		{
-			QS_PROFILE_SCOPE("glfwInit")
+			QS_PROFILE_SCOPE("glfwInit");
 			int seccess = glfwInit();
 			QS_CORE_ASSERT(seccess, "Couldn't Initialize GLFW")
 
@@ -54,7 +54,7 @@ namespace Quelos
 		}
 
 		{
-			QS_PROFILE_SCOPE("glfwCreateWindow")
+			QS_PROFILE_SCOPE("glfwCreateWindow");
 			m_Window = glfwCreateWindow((int)m_Data.Width, (int)m_Data.Height, m_Data.Title.c_str(), NULL, NULL);
 		}
 		
