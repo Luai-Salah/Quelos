@@ -1,3 +1,6 @@
+include "./vendor/premake/premake_customization/solution_items.lua"
+include "Dependencies.lua"
+
 workspace "Quelos"
 	architecture "x64"
 	startproject "QuelosEditor"
@@ -14,7 +17,6 @@ workspace "Quelos"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-include "Dependencies.lua"
 
 group "Dependencies"
 	include "Quelos/vendor/GLFW"
