@@ -15,7 +15,7 @@ namespace Quelos
 		m_PerspectiveNear = nearClip;
 		m_PerspectiveFar = farClip;
 
-		void RecalculateProjection();
+		RecalculateProjection();
 	}
 
 	void SceneCamera::SetOrthographic(float size, float nearClip, float farClip)
@@ -26,7 +26,7 @@ namespace Quelos
 		m_OrthographicNear = nearClip;
 		m_OrthographicFar = farClip;
 
-		void RecalculateProjection();
+		RecalculateProjection();
 	}
 
 	void SceneCamera::SetViewportSize(uint32_t width, uint32_t height)
@@ -34,6 +34,7 @@ namespace Quelos
 		m_AspectRatio = (float)width / (float)height;
 		RecalculateProjection();
 	}
+
 	void SceneCamera::RecalculateProjection()
 	{
 		if (m_ProjectionType == ProjectionType::Perspective)

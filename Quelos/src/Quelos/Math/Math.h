@@ -4,36 +4,30 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-typedef glm::vec2 Vector2;
-typedef glm::vec3 Vector3;
-typedef glm::vec4 Vector4;
-typedef glm::mat4 Matrix4;
-typedef glm::quat Quaternion;
-
 namespace Quelos
 {
 	class Math
 	{
 	public:
 		static float Radians(float degrees) { return degrees * (float)0.01745329251994329576923690768489; }
-		static Vector3 Radians(Vector3 degrees) { return {Radians(degrees.x), Radians(degrees.y), Radians(degrees.z)}; }
+		static glm::vec3 Radians(glm::vec3 degrees) { return {Radians(degrees.x), Radians(degrees.y), Radians(degrees.z)}; }
 
 		static float Degrees(float radians) { return radians / (float)0.01745329251994329576923690768489; }
-		static Vector3 Degrees(Vector3 radians) { return {Degrees(radians.x), Degrees(radians.y), Degrees(radians.z)}; }
+		static glm::vec3 Degrees(glm::vec3 radians) { return {Degrees(radians.x), Degrees(radians.y), Degrees(radians.z)}; }
 
 		static float Length(float x) { return abs(x); }
 
 		static float Clamp(float value, float min, float max) { return std::min(std::max(value, min), max); }
 		static float Lerp(float value1, float value2, float t) { return std::lerp(value1, value2, t); /*value1* (1.0f - t) + (value2 * t);*/ }
 
-		static Matrix4 Perspective(float verticalFOV, float aspectRatio, float nearClip, float farClip);
+		static glm::mat4 Perspective(float verticalFOV, float aspectRatio, float nearClip, float farClip);
 
-		static Matrix4 Translate(const Vector3& v);
-		static Matrix4 Scale(const Vector3& v);
-		static Matrix4 Rotate(float angle, const Vector3& v);
-		static Vector3 Rotate(const Quaternion& q, const Vector3& v);
+		static glm::mat4 Translate(const glm::vec3& v);
+		static glm::mat4 Scale(const glm::vec3& v);
+		static glm::mat4 Rotate(float angle, const glm::vec3& v);
+		static glm::vec3 Rotate(const glm::quat& q, const glm::vec3& v);
 
-		static bool DecomposeTransform(const Matrix4& transform, Vector3& outPosition, Vector3& outRotation, Vector3& outScale);
+		static bool DecomposeTransform(const glm::mat4& transform, glm::vec3& outPosition, glm::vec3& outRotation, glm::vec3& outScale);
 
 		template<typename T>
 		static T Epsilon() { T result = std::numeric_limits<T>().epsilon(); return result; }

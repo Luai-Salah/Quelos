@@ -32,41 +32,41 @@ namespace Quelos
 
 	struct TransformComponent
 	{
-		Vector3 Position;
-		Vector3 Rotation;
-		Vector3 Scale{ 1.0f };
+		glm::vec3 Position;
+		glm::vec3 Rotation;
+		glm::vec3 Scale{ 1.0f };
 
 		TransformComponent() = default;
 		TransformComponent(const TransformComponent&) = default;
-		TransformComponent(const Vector3& position, Vector3 size = Vector3{ 1.0f }, float rotation = 0.0f)
+		TransformComponent(const glm::vec3& position, glm::vec3 size = glm::vec3{ 1.0f }, float rotation = 0.0f)
 			: Position(position), Scale(size), Rotation(rotation) { }
 
-		Matrix4 GetTransformMatrix() const
+		glm::mat4 GetTransformMatrix() const
 		{
-			Matrix4 rotation = glm::rotate(Matrix4(1.0f), Rotation.x, Vector3(1.0f, 0.0f, 0.0f))
-				* glm::rotate(Matrix4(1.0f), Rotation.y, Vector3(0.0f, 1.0f, 0.0f))
-				* glm::rotate(Matrix4(1.0f), Rotation.z, Vector3(0.0f, 0.0f, 1.0f));
+			glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), Rotation.x, glm::vec3(1.0f, 0.0f, 0.0f))
+				* glm::rotate(glm::mat4(1.0f), Rotation.y, glm::vec3(0.0f, 1.0f, 0.0f))
+				* glm::rotate(glm::mat4(1.0f), Rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 
-			return glm::translate(Matrix4(1.0f), Position) * rotation * glm::scale(Matrix4(1.0f), Scale);
+			return glm::translate(glm::mat4(1.0f), Position) * rotation * glm::scale(glm::mat4(1.0f), Scale);
 		}
 	};
 
 	struct SpriteRendererComponent
 	{
-		Vector4 Color{ 1.0f };
+		glm::vec4 Color{ 1.0f };
 		Ref<SubTexture2D> Texture;
-		Vector2 MinTextureCoords{ 0.0f };
-		Vector2 MaxTextureCoords{ 1.0f };
+		glm::vec2 MinTextureCoords{ 0.0f };
+		glm::vec2 MaxTextureCoords{ 1.0f };
 		float TilingFactor = 1.0f;
 
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
-		SpriteRendererComponent(const Vector4& color) : Color(color) { }
+		SpriteRendererComponent(const glm::vec4& color) : Color(color) { }
 	};
 
 	struct CircleRendererComponent
 	{
-		Vector4 Color{ 1.0f };
+		glm::vec4 Color{ 1.0f };
 		float Thickness = 1.0f;
 		float Fade = 0.005f;
 
@@ -121,7 +121,7 @@ namespace Quelos
 		Rigidbody2DComponent() = default;
 		Rigidbody2DComponent(const Rigidbody2DComponent&) = default;
 
-		void ApplyForceToCenter(Vector2 force)
+		void ApplyForceToCenter(glm::vec2 force)
 		{
 			RuntimeBody->ApplyForceToCenter({ force.x, force.y }, true);
 		}
@@ -129,8 +129,8 @@ namespace Quelos
 
 	struct BoxCollider2DComponent
 	{
-		Vector2 Offset = { 0.0f , 0.0f };
-		Vector2 Size = { 0.5f , 0.5f };
+		glm::vec2 Offset = { 0.0f , 0.0f };
+		glm::vec2 Size = { 0.5f , 0.5f };
 
 		// TODO: Move into physics material
 		float Density = 1.0f;
@@ -147,7 +147,7 @@ namespace Quelos
 
 	struct CircleCollider2DComponent
 	{
-		Vector2 Offset = { 0.0f , 0.0f };
+		glm::vec2 Offset = { 0.0f , 0.0f };
 		float Radius = 0.5f;
 
 		// TODO: Move into physics material

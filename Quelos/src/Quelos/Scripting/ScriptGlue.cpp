@@ -3,6 +3,7 @@
 #include "ScriptEngine.h"
 
 #include "Quelos/Core/Input.h"
+#include "Quelos/Physics/Physics2D.h"
 
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>
@@ -61,7 +62,7 @@ namespace Quelos
 		return ScriptEngine::GetManagedInstance(entityID);
 	}
 
-	static void TransformComponent_GetPosition(GUID guid, Vector3* outPosition)
+	static void Transform_GetPosition(GUID guid, glm::vec3* outPosition)
 	{
 		Scene* scene = ScriptEngine::GetSceneContext();
 
@@ -69,15 +70,57 @@ namespace Quelos
 		*outPosition = entity.GetComponent<TransformComponent>().Position;
 	}
 
-	static void TransformComponent_SetPosition(GUID guid, Vector3* position)
+	static void Transform_SetPosition(GUID guid, glm::vec3* position)
 	{
 		Scene* scene = ScriptEngine::GetSceneContext();
 
 		Entity entity = scene->GetEntityByGUID(guid);
 		entity.GetComponent<TransformComponent>().Position = *position;
 	}
+	
+	static Rigidbody2DComponent::BodyType Rigidbody2D_GetBodyType(GUID guid)
+	{
+		Scene* scene = ScriptEngine::GetSceneContext();
 
-	static void Rigidbody2DComponent_AddLinearImpulseToCenter(GUID guid, Vector2* impulse, bool wake)
+		Entity entity = scene->GetEntityByGUID(guid);
+		auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+		return rb2d.Type;
+	}
+
+	static void Rigidbody2D_SetBodyType(GUID guid, Rigidbody2DComponent::BodyType type)
+	{
+		Scene* scene = ScriptEngine::GetSceneContext();
+
+		Entity entity = scene->GetEntityByGUID(guid);
+		auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+		b2Body* body = rb2d.RuntimeBody;
+		rb2d.Type = type;
+		body->SetType(Utils::Rigidbody2DTypeToBox2D(type));
+	}
+
+	static void Rigidbody2D_GetLinearVelocity(GUID guid, glm::vec2* outVelocity)
+	{
+		Scene* scene = ScriptEngine::GetSceneContext();
+
+		Entity entity = scene->GetEntityByGUID(guid);
+		auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+		b2Body* body = rb2d.RuntimeBody;
+		const b2Vec2& velocity = body->GetLinearVelocity();
+
+		*outVelocity = glm::vec2(velocity.x, velocity.y);
+	}
+
+	static void Rigidbody2D_SetLinearVelocity(GUID guid, glm::vec2* velocity)
+	{
+		Scene* scene = ScriptEngine::GetSceneContext();
+
+		Entity entity = scene->GetEntityByGUID(guid);
+		auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+		b2Body* body = rb2d.RuntimeBody;
+		body->SetLinearVelocity(b2Vec2(velocity->x, velocity->y));
+	}
+	
+	static void Rigidbody2D_AddLinearImpulseToCenter(GUID guid, glm::vec2* impulse, bool wake)
 	{
 		Scene* scene = ScriptEngine::GetSceneContext();
 
@@ -98,10 +141,11 @@ namespace Quelos
 		([&]()
 		{
 			std::string_view typeName = typeid(Component).name();
-			size_t pos = typeName.find_last_of(':');
-			std::string_view structName = typeName.substr(pos + 1);
+			size_t pos = typeName.find_last_of(':') + 1;
+			size_t count = typeName.length() - 9 - pos;
+			std::string_view componentName = typeName.substr(pos, count);
 
-			std::string managedTypeName = fmt::format("Quelos.{}", structName);
+			std::string managedTypeName = fmt::format("Quelos.{}", componentName);
 
 			MonoType* managedType = mono_reflection_type_from_name(managedTypeName.data(),
 				ScriptEngine::GetCoreAssemblyImage());
@@ -137,10 +181,14 @@ namespace Quelos
 		QS_ADD_INTERNAL_CALL(Entity_FindEntityByName);
 		QS_ADD_INTERNAL_CALL(Entity_GetScriptInstance);
 
-		QS_ADD_INTERNAL_CALL(TransformComponent_GetPosition);
-		QS_ADD_INTERNAL_CALL(TransformComponent_SetPosition);
+		QS_ADD_INTERNAL_CALL(Transform_GetPosition);
+		QS_ADD_INTERNAL_CALL(Transform_SetPosition);
 
-		QS_ADD_INTERNAL_CALL(Rigidbody2DComponent_AddLinearImpulseToCenter);
+		QS_ADD_INTERNAL_CALL(Rigidbody2D_GetBodyType);
+		QS_ADD_INTERNAL_CALL(Rigidbody2D_SetBodyType);
+		QS_ADD_INTERNAL_CALL(Rigidbody2D_GetLinearVelocity);
+		QS_ADD_INTERNAL_CALL(Rigidbody2D_SetLinearVelocity);
+		QS_ADD_INTERNAL_CALL(Rigidbody2D_AddLinearImpulseToCenter);
 
 		QS_ADD_INTERNAL_CALL(Input_GetKey);
 	}

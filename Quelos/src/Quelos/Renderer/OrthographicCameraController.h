@@ -46,7 +46,7 @@ namespace Quelos
 		OrthographicCamera m_Camera;
 		OrthographicCameraBounds m_Bounds;
 
-		Vector3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
 		float m_CameraTransilationSpeed = 5.0f;
 		float m_CameraRotation = 0.0f;
 		float m_CameraRotateSpeed = 10.0f;

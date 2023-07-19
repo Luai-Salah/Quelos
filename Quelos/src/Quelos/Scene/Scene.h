@@ -21,7 +21,7 @@ namespace Quelos
 		static Ref<Scene> Copy(Ref<Scene> other);
 
 		Entity CreateEntity(const std::string& name = std::string());
-		Entity CreateEntityWithGUID(GUID guid, const std::string& name = std::string());
+		Entity CreateEntityWithGUID(GUID guid, const std::string& name = std::string(), const std::string& scriptName = std::string());
 		void DestroyEntity(Entity entity);
 
 		void OnRuntimeStart();

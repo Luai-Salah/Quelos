@@ -19,7 +19,7 @@ namespace Quelos
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	void OpenGLRendererAPI::SetClearColor(const Vector4& color)
+	void OpenGLRendererAPI::SetClearColor(const glm::vec4& color)
 	{
 		glClearColor(color.x, color.y, color.z, color.w);
 	}

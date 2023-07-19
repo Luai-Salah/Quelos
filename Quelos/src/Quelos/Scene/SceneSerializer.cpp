@@ -10,9 +10,9 @@
 namespace YAML
 {
 	template<>
-	struct convert<Vector3>
+	struct convert<glm::vec3>
 	{
-		static Node encode(const Vector3& rhs)
+		static Node encode(const glm::vec3& rhs)
 		{
 			Node node;
 			node.push_back(rhs.x);
@@ -21,7 +21,7 @@ namespace YAML
 			return node;
 		}
 
-		static bool decode(const Node& node, Vector3& rhs)
+		static bool decode(const Node& node, glm::vec3& rhs)
 		{
 			if (!node.IsSequence() || node.size() != 3)
 				return false;
@@ -34,9 +34,9 @@ namespace YAML
 	};
 
 	template<>
-	struct convert<Vector2>
+	struct convert<glm::vec2>
 	{
-		static Node encode(const Vector2& rhs)
+		static Node encode(const glm::vec2& rhs)
 		{
 			Node node;
 			node.push_back(rhs.x);
@@ -44,7 +44,7 @@ namespace YAML
 			return node;
 		}
 
-		static bool decode(const Node& node, Vector2& rhs)
+		static bool decode(const Node& node, glm::vec2& rhs)
 		{
 			if (!node.IsSequence() || node.size() != 2)
 				return false;
@@ -56,9 +56,9 @@ namespace YAML
 	};
 
 	template<>
-	struct convert<Vector4>
+	struct convert<glm::vec4>
 	{
-		static Node encode(const Vector4& rhs)
+		static Node encode(const glm::vec4& rhs)
 		{
 			Node node;
 			node.push_back(rhs.x);
@@ -68,7 +68,7 @@ namespace YAML
 			return node;
 		}
 
-		static bool decode(const Node& node, Vector4& rhs)
+		static bool decode(const Node& node, glm::vec4& rhs)
 		{
 			if (!node.IsSequence() || node.size() != 4)
 				return false;
@@ -114,21 +114,21 @@ namespace Quelos
 				break;											\
 			}
 
-	YAML::Emitter& operator<<(YAML::Emitter& out, const Vector2& v)
+	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec2& v)
 	{
 		out << YAML::Flow;
 		out << YAML::BeginSeq << v.x << v.y << YAML::EndSeq;
 		return out;
 	}
 
-	YAML::Emitter& operator<<(YAML::Emitter& out, const Vector3& v)
+	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec3& v)
 	{
 		out << YAML::Flow;
 		out << YAML::BeginSeq << v.x << v.y << v.z << YAML::EndSeq;
 		return out;
 	}
 
-	YAML::Emitter& operator<<(YAML::Emitter& out, const Vector4& v)
+	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec4& v)
 	{
 		out << YAML::Flow;
 		out << YAML::BeginSeq << v.x << v.y << v.z << v.w << YAML::EndSeq;
@@ -279,9 +279,9 @@ namespace Quelos
 								WRITE_SCRIPT_FIELD(ULong, uint64_t);
 								WRITE_SCRIPT_FIELD(Float, float);
 								WRITE_SCRIPT_FIELD(Double, double);
-								WRITE_SCRIPT_FIELD(Vector2, Vector2);
-								WRITE_SCRIPT_FIELD(Vector3, Vector3);
-								WRITE_SCRIPT_FIELD(Vector4, Vector4);
+								WRITE_SCRIPT_FIELD(Float2, glm::vec2);
+								WRITE_SCRIPT_FIELD(Float3, glm::vec3);
+								WRITE_SCRIPT_FIELD(Float4, glm::vec4);
 								WRITE_SCRIPT_FIELD(Entity, GUID);
 							}
 						}
@@ -445,9 +445,9 @@ namespace Quelos
 				{
 					// Entities always have a transformComponent
 					auto& tc = deserializedEntity.GetComponent<TransformComponent>();
-					tc.Position = transform["Position"].as<Vector3>();
-					tc.Rotation = transform["Rotation"].as<Vector3>();
-					tc.Scale = transform["Scale"].as<Vector3>();
+					tc.Position = transform["Position"].as<glm::vec3>();
+					tc.Rotation = transform["Rotation"].as<glm::vec3>();
+					tc.Scale = transform["Scale"].as<glm::vec3>();
 				}
 
 				auto cameraComponent = entity["CameraComponent"];
@@ -456,6 +456,7 @@ namespace Quelos
 					auto& cc = deserializedEntity.AddComponent<CameraComponent>();
 
 					auto cameraProps = cameraComponent["Camera"];
+					cc.Camera.SetViewportSize(1, 1);
 					cc.Camera.SetProjectionType((SceneCamera::ProjectionType)cameraProps["ProjectionType"].as<int>());
 
 					cc.Camera.SetPerspectiveVerticalFOV(cameraProps["PresVerticalFOV"].as<float>());
@@ -520,9 +521,9 @@ namespace Quelos
 									READ_SCRIPT_FIELD(ULong, uint64_t);
 									READ_SCRIPT_FIELD(Float, float);
 									READ_SCRIPT_FIELD(Double, double);
-									READ_SCRIPT_FIELD(Vector2, Vector2);
-									READ_SCRIPT_FIELD(Vector3, Vector3);
-									READ_SCRIPT_FIELD(Vector4, Vector4);
+									READ_SCRIPT_FIELD(Float2, glm::vec2);
+									READ_SCRIPT_FIELD(Float3, glm::vec3);
+									READ_SCRIPT_FIELD(Float4, glm::vec4);
 									READ_SCRIPT_FIELD(Entity, GUID);
 								}
 							}
@@ -536,7 +537,7 @@ namespace Quelos
 					auto& sr = deserializedEntity.AddComponent<SpriteRendererComponent>();
 
 					if (spriteRendererComponent["Color"].IsDefined())
-						sr.Color = spriteRendererComponent["Color"].as<Vector4>();
+						sr.Color = spriteRendererComponent["Color"].as<glm::vec4>();
 
 					if (spriteRendererComponent["TexturePath"].IsDefined())
 					{
@@ -556,7 +557,7 @@ namespace Quelos
 
 					auto color = cRc["Color"];
 					if (color)
-						cr.Color = color.as<Vector4>();
+						cr.Color = color.as<glm::vec4>();
 
 					auto thickness = cRc["Thickness"];
 					if (thickness)
@@ -579,8 +580,8 @@ namespace Quelos
 				if (bc2dc)
 				{
 					auto& bc = deserializedEntity.AddComponent<BoxCollider2DComponent>();
-					bc.Offset = bc2dc["Offset"].as<Vector2>();
-					bc.Size = bc2dc["Size"].as<Vector2>();
+					bc.Offset = bc2dc["Offset"].as<glm::vec2>();
+					bc.Size = bc2dc["Size"].as<glm::vec2>();
 
 					bc.Density = bc2dc["Density"].as<float>();
 					bc.Friction = bc2dc["Friction"].as<float>();
@@ -592,7 +593,7 @@ namespace Quelos
 				if (cc2dc)
 				{
 					auto& cc = deserializedEntity.AddComponent<CircleCollider2DComponent>();
-					cc.Offset = cc2dc["Offset"].as<Vector2>();
+					cc.Offset = cc2dc["Offset"].as<glm::vec2>();
 					cc.Radius = cc2dc["Radius"].as<float>();
 
 					cc.Density = cc2dc["Density"].as<float>();

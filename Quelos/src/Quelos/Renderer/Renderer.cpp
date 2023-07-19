@@ -14,7 +14,7 @@ namespace Quelos
 
 	struct CameraData
 	{
-		Matrix4 ViewProjection;
+		glm::mat4 ViewProjection;
 	};
 
 	Ref<UniformBuffer> CameraUniformBuffer;
@@ -25,7 +25,7 @@ namespace Quelos
 		QS_PROFILE_FUNCTION();
 
 		CameraUniformBuffer = UniformBuffer::Create(sizeof(CameraData), 0);
-		TransformUniformBuffer = UniformBuffer::Create(sizeof(Matrix4), 1);
+		TransformUniformBuffer = UniformBuffer::Create(sizeof(glm::mat4), 1);
 
 		RenderCommand::Init();
 		Renderer2D::Init(CameraUniformBuffer);
@@ -46,7 +46,7 @@ namespace Quelos
 		m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}
 
-	void Renderer::BeginScene(const Matrix4& viewProjection)
+	void Renderer::BeginScene(const glm::mat4& viewProjection)
 	{
 		m_SceneData->ViewProjectionMatrix = viewProjection;
 		CameraUniformBuffer->SetData(glm::value_ptr(viewProjection), sizeof(CameraData));
@@ -56,12 +56,12 @@ namespace Quelos
 	{
 	}
 
-	void Renderer::Submit(const Ref<Shader> shader, const Ref<VertexArray>& vertexArray, const Matrix4& tranform)
+	void Renderer::Submit(const Ref<Shader> shader, const Ref<VertexArray>& vertexArray, const glm::mat4& tranform)
 	{
 		shader->Unbind();
 		shader->Bind();
 
-		TransformUniformBuffer->SetData(glm::value_ptr(tranform), sizeof(Matrix4));
+		TransformUniformBuffer->SetData(glm::value_ptr(tranform), sizeof(glm::mat4));
 
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);

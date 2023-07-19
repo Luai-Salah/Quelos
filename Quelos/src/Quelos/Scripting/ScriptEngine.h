@@ -23,7 +23,7 @@ namespace Quelos
 		Short, Int, Long,
 		UShort, UInt, ULong,
 		Float, Double,
-		Vector2, Vector3, Vector4,
+		Float2, Float3, Float4,
 		Entity
 	};
 
@@ -140,7 +140,7 @@ namespace Quelos
 		static void Init();
 		static void Shutdown();
 
-		static void OnCreateEntity(Entity entity);
+		static void OnCreateEntity(Entity entity, const std::string& scriptName);
 		static void OnStartEntity(Entity entity);
 		static void OnUpdateEntity(Entity entity, TimeStep ts);
 
@@ -204,9 +204,9 @@ namespace Quelos
 				case ScriptFieldType::Float:		return "Float";
 				case ScriptFieldType::Double:		return "Double";
 
-				case ScriptFieldType::Vector2:		return "Vector2";
-				case ScriptFieldType::Vector3:		return "Vector3";
-				case ScriptFieldType::Vector4:		return "Vector4";
+				case ScriptFieldType::Float2:		return "Float2";
+				case ScriptFieldType::Float3:		return "Float3";
+				case ScriptFieldType::Float4:		return "Float4";
 
 				case ScriptFieldType::Entity:		return "Entity";
 			}
@@ -226,9 +226,9 @@ namespace Quelos
 			else if (stringFieldType == "Long")			return ScriptFieldType::Long;
 			else if (stringFieldType == "Float")		return ScriptFieldType::Float;
 			else if (stringFieldType == "Double")		return ScriptFieldType::Double;
-			else if (stringFieldType == "Vector2")		return ScriptFieldType::Vector2;
-			else if (stringFieldType == "Vector3")		return ScriptFieldType::Vector3;
-			else if (stringFieldType == "Vector4")		return ScriptFieldType::Vector4;
+			else if (stringFieldType == "Float2")		return ScriptFieldType::Float2;
+			else if (stringFieldType == "Float3")		return ScriptFieldType::Float3;
+			else if (stringFieldType == "Float4")		return ScriptFieldType::Float4;
 
 			QS_CORE_ASSERT(false, "Unknown ScriptFieldType")
 

@@ -11,22 +11,22 @@ namespace Quelos
         internal Entity(ulong id)
         {
             ID = id;
-            Transform = new TransformComponent { Entity = this };
+            Transform = new Transform { Entity = this };
         }
 
         public static implicit operator bool(Entity entity) => entity != null;
 
-        public TransformComponent Transform { get; }
+        public Transform Transform { get; }
 
-        public Vector3 Position
+        public float3 Position
         {
             get
             {
-                InternalCalls.TransformComponent_GetPosition(ID, out Vector3 position);
+                InternalCalls.Transform_GetPosition(ID, out float3 position);
                 return position;
             }
 
-            set => InternalCalls.TransformComponent_SetPosition(ID, ref value);
+            set => InternalCalls.Transform_SetPosition(ID, ref value);
         }
 
         public T GetComponent<T>() where T : Component, new()
@@ -62,6 +62,6 @@ namespace Quelos
             return null;
         }
 
-        public void Log(object text) => InternalCalls.NativeLog(text.ToString());
+        public void print(object text) => InternalCalls.NativeLog(text.ToString());
     }
 }

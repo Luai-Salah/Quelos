@@ -15,7 +15,7 @@ namespace Quelos
 		Camera(Math::Perspective(Math::Radians(fov), aspectRatio, nearClip, farClip))
 	{
 		UpdateView();
-		MousePan(Vector2{ 0.01f });
+		MousePan(glm::vec2{ 0.01f });
 	}
 
 	void EditorCamera::UpdateProjection()
@@ -31,12 +31,12 @@ namespace Quelos
 
 		m_Position = CalculatePosition();
 
-		const Quaternion orientation = GetOrientation();
-		m_ViewMatrix = glm::translate(Matrix4(1.0f), m_Position) * glm::toMat4(orientation);
+		const glm::quat orientation = GetOrientation();
+		m_ViewMatrix = glm::translate(glm::mat4(1.0f), m_Position) * glm::toMat4(orientation);
 		m_ViewMatrix = glm::inverse(m_ViewMatrix);
 	}
 
-	Vector2 EditorCamera::PanSpeed() const
+	glm::vec2 EditorCamera::PanSpeed() const
 	{
 		float x = std::min(m_ViewportWidth / 1000.0f, 2.4f); // max = 2.4f
 		float xFactor = 0.0366f * (x * x) - 0.1778f * x + 0.3021f;
@@ -65,8 +65,8 @@ namespace Quelos
 	{
 		if (Input::GetKey(KeyCode::LeftControl))
 		{
-			const Vector2& mouse = Input::GetMousePosition();
-			const Vector2 delta = (mouse - m_InitialMousePosition) * 0.003f;
+			const glm::vec2& mouse = Input::GetMousePosition();
+			const glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;
 			m_InitialMousePosition = mouse;
 
 			if (Input::IsMouseButtonPressed(MouseButtonCode::Left))
@@ -76,8 +76,8 @@ namespace Quelos
 		}
 		else
 		{
-			const Vector2& mouse = Input::GetMousePosition();
-			const Vector2 delta = (mouse - m_InitialMousePosition) * 0.003f;
+			const glm::vec2& mouse = Input::GetMousePosition();
+			const glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;
 			m_InitialMousePosition = mouse;
 
 			if (Input::IsMouseButtonPressed(MouseButtonCode::Right))
@@ -101,14 +101,14 @@ namespace Quelos
 		return false;
 	}
 
-	void EditorCamera::MousePan(const Vector2& delta)
+	void EditorCamera::MousePan(const glm::vec2& delta)
 	{
-		Vector2 speed = PanSpeed();
+		glm::vec2 speed = PanSpeed();
 		m_FocalPoint += -GetRightDirection() * delta.x * speed.x * m_Distance;
 		m_FocalPoint += GetUpDirection() * delta.y * speed.y * m_Distance;
 	}
 
-	void EditorCamera::MouseRotate(const Vector2& delta)
+	void EditorCamera::MouseRotate(const glm::vec2& delta)
 	{
 		float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
 		m_Yaw += yawSign * delta.x * RotationSpeed();
@@ -125,35 +125,35 @@ namespace Quelos
 		}
 	}
 
-	void EditorCamera::PlayerMove(const Vector2& delta)
+	void EditorCamera::PlayerMove(const glm::vec2& delta)
 	{
 		m_PlayerMode = true;
 		m_Pitch += delta.y;
 	}
 
-	Vector3 EditorCamera::GetUpDirection() const
+	glm::vec3 EditorCamera::GetUpDirection() const
 	{
-		return glm::rotate(GetOrientation(), Vector3(0.0f, 1.0f, 0.0f));
+		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0f));
 	}
 
-	Vector3 EditorCamera::GetRightDirection() const
+	glm::vec3 EditorCamera::GetRightDirection() const
 	{
-		return glm::rotate(GetOrientation(), Vector3(1.0f, 0.0f, 0.0f));
+		return glm::rotate(GetOrientation(), glm::vec3(1.0f, 0.0f, 0.0f));
 	}
 
-	Vector3 EditorCamera::GetForwardDirection() const
+	glm::vec3 EditorCamera::GetForwardDirection() const
 	{
-		return glm::rotate(GetOrientation(), Vector3(0.0f, 0.0f, -1.0f));
+		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 0.0f, -1.0f));
 	}
 
-	Vector3 EditorCamera::CalculatePosition() const
+	glm::vec3 EditorCamera::CalculatePosition() const
 	{
 		return m_FocalPoint - GetForwardDirection() * m_Distance;
 	}
 
-	Quaternion EditorCamera::GetOrientation() const
+	glm::quat EditorCamera::GetOrientation() const
 	{
-		return Quaternion(Vector3(-m_Pitch, -m_Yaw, 0.0f));
+		return glm::quat(glm::vec3(-m_Pitch, -m_Yaw, 0.0f));
 	}
 
 }

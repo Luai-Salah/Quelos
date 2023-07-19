@@ -36,7 +36,9 @@ project "Quelos"
 		"%{IncludeDir.Shaderc}",
 		"%{IncludeDir.SpirVCross}",
 		"%{IncludeDir.VulkanSDK}",
-		"%{IncludeDir.Mono}"
+		"%{IncludeDir.Mono}",
+		"%{IncludeDir.msdfgen}",
+		"%{IncludeDir.msdf_atlas_gen}"
 	}
 
 	links {
@@ -44,6 +46,7 @@ project "Quelos"
 		"Box2D",
 		"Glad",
 		"ImGui",
+		"msdf-atlas-gen",
 		"yaml-cpp",
 		"%{Library.Mono}",
 		"opengl32.lib"
@@ -72,35 +75,35 @@ project "Quelos"
 			"QS_ENABLE_ASSERT"
 		}
 
-		filter "configurations:Debug"
-			defines "QS_DEBUG"
-			runtime "Debug"
-			symbols "on"
+	filter "configurations:Debug"
+		defines "QS_DEBUG"
+		runtime "Debug"
+		symbols "on"
 
-			links {
-				"%{Library.ShaderC_Debug}",
-				"%{Library.SPIRV_Cross_Debug}",
-				"%{Library.SPIRV_Cross_GLSL_Debug}"
-			}
+		links {
+			"%{Library.ShaderC_Debug}",
+			"%{Library.SPIRV_Cross_Debug}",
+			"%{Library.SPIRV_Cross_GLSL_Debug}"
+		}
 
-		filter "configurations:Release"
-			defines "QS_RELEASE"
-			runtime "Release"
-			optimize "on"
+	filter "configurations:Release"
+		defines "QS_RELEASE"
+		runtime "Release"
+		optimize "on"
 
-			links {
-				"%{Library.ShaderC_Release}",
-				"%{Library.SPIRV_Cross_Release}",
-				"%{Library.SPIRV_Cross_GLSL_Release}"
-			}
+		links {
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}"
+		}
 
-		filter "configurations:Dist"
-			defines "QS_DIST"
-			runtime "Release"
-			optimize "on"
+	filter "configurations:Dist"
+		defines "QS_DIST"
+		runtime "Release"
+		optimize "on"
 
-			links {
-				"%{Library.ShaderC_Release}",
-				"%{Library.SPIRV_Cross_Release}",
-				"%{Library.SPIRV_Cross_GLSL_Release}"
-			}
+		links {
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}"
+		}

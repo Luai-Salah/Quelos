@@ -42,7 +42,6 @@ namespace Quelos
 
 		Input::Init();
 		Renderer::Init();
-		ScriptEngine::Init();
 
 		//Scripting::Init();
 

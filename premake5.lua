@@ -19,11 +19,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 
 group "Dependencies"
+	include "Quelos/vendor/Box2D"
 	include "Quelos/vendor/GLFW"
 	include "Quelos/vendor/Glad"
 	include "Quelos/vendor/ImGui"
+	include "Quelos/vendor/msdf-atlas-gen"
 	include "Quelos/vendor/yaml-cpp"
-	include "Quelos/vendor/Box2D"
 group ""
 
 group "Core"

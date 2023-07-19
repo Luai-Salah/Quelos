@@ -13,9 +13,9 @@ namespace Quelos
 
 	struct QuadVertex
 	{
-		Vector3 Position;
-		Vector4 Color;
-		Vector2 TexCoord;
+		glm::vec3 Position;
+		glm::vec4 Color;
+		glm::vec2 TexCoord;
 		float TexIndex = 0.0f;
 		float TilingFactor = 1.0f;
 
@@ -25,8 +25,8 @@ namespace Quelos
 
 	struct LineVertex
 	{
-		Vector3 Position;
-		Vector4 Color;
+		glm::vec3 Position;
+		glm::vec4 Color;
 
 		// Editor-Only
 		int EntityID = -1;
@@ -34,9 +34,9 @@ namespace Quelos
 
 	struct CircleVertex
 	{
-		Vector3 WorldPosition;
-		Vector3 LocalPosition;
-		Vector4 Color;
+		glm::vec3 WorldPosition;
+		glm::vec3 LocalPosition;
+		glm::vec4 Color;
 		float Thickness = 1.0f;
 		float Fade = 0.005f;
 
@@ -84,13 +84,13 @@ namespace Quelos
 		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
 		uint32_t TextureSlotIndex = 1; // 0 = white texture
 
-		Vector4 QuadVertexPositions[4];
+		glm::vec4 QuadVertexPositions[4];
 
 		Renderer2D::Statistics Stats;
 
 		struct CameraData
 		{
-			Matrix4 ViewProjection;
+			glm::mat4 ViewProjection;
 		};
 
 		CameraData CameraBuffer;
@@ -235,7 +235,7 @@ namespace Quelos
 		StartBatch();
 	}
 
-	void Renderer2D::BeginScene(const Matrix4& viewProjection)
+	void Renderer2D::BeginScene(const glm::mat4& viewProjection)
 	{
 		QS_PROFILE_FUNCTION();
 
@@ -249,7 +249,7 @@ namespace Quelos
 		StartBatch();
 	}
 
-	void Renderer2D::BeginScene(const Camera& camera, const Matrix4& transform)
+	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
 		QS_PROFILE_FUNCTION();
 
@@ -338,14 +338,14 @@ namespace Quelos
 		StartBatch();
 	}
 
-	void Renderer2D::DrawSprite(const Matrix4& transform, const SpriteRendererComponent& src, int entityID)
+	void Renderer2D::DrawSprite(const glm::mat4& transform, const SpriteRendererComponent& src, int entityID)
 	{
 		if (src.Texture)
 			DrawQuad(transform, src.Texture, src.TilingFactor, src.Color, entityID);
 		else DrawQuad(transform, src.Color, entityID);
 	}
 
-	void Renderer2D::DrawCircle(const Matrix4& transform, const Vector4& color, float thickness, float fade, int entityID)
+	void Renderer2D::DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness, float fade, int entityID)
 	{
 		QS_PROFILE_FUNCTION();
 
@@ -369,7 +369,7 @@ namespace Quelos
 		s_Data->Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawLine(const Vector3& p0, const Vector3& p1, const Vector4& color, int entityID)
+	void Renderer2D::DrawLine(const glm::vec3& p0, const glm::vec3& p1, const glm::vec4& color, int entityID)
 	{
 		s_Data->LineVertexBufferPtr->Position = p0;
 		s_Data->LineVertexBufferPtr->Color = color;
@@ -384,9 +384,9 @@ namespace Quelos
 		s_Data->LineVertexCount += 2;
 	}
 
-	void Renderer2D::DrawRect(const Matrix4& transform, const Vector4& color, int entityID)
+	void Renderer2D::DrawRect(const glm::mat4& transform, const glm::vec4& color, int entityID)
 	{
-		Vector3 lineVerticies[4];
+		glm::vec3 lineVerticies[4];
 		for (size_t i = 0; i < 4; i++)
 			lineVerticies[i] = transform * s_Data->QuadVertexPositions[i];
 
@@ -396,12 +396,12 @@ namespace Quelos
 		DrawLine(lineVerticies[3], lineVerticies[0], color, entityID);
 	}
 
-	void Renderer2D::DrawRect(const Vector3& position, const Vector2& size, const Vector4& color, int entityID)
+	void Renderer2D::DrawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, int entityID)
 	{
-		Vector3 p0 = Vector3(position.x - size.x * 0.5f, position.y - size.y * 0.5f, position.z);
-		Vector3 p1 = Vector3(position.x + size.x * 0.5f, position.y - size.y * 0.5f, position.z);
-		Vector3 p2 = Vector3(position.x + size.x * 0.5f, position.y + size.y * 0.5f, position.z);
-		Vector3 p3 = Vector3(position.x - size.x * 0.5f, position.y + size.y * 0.5f, position.z);
+		glm::vec3 p0 = glm::vec3(position.x - size.x * 0.5f, position.y - size.y * 0.5f, position.z);
+		glm::vec3 p1 = glm::vec3(position.x + size.x * 0.5f, position.y - size.y * 0.5f, position.z);
+		glm::vec3 p2 = glm::vec3(position.x + size.x * 0.5f, position.y + size.y * 0.5f, position.z);
+		glm::vec3 p3 = glm::vec3(position.x - size.x * 0.5f, position.y + size.y * 0.5f, position.z);
 
 		DrawLine(p0, p1, color, entityID);
 		DrawLine(p1, p2, color, entityID);
@@ -419,42 +419,42 @@ namespace Quelos
 		s_Data->LineWidth = width;
 	}
 
-	void Renderer2D::DrawQuad(const Vector2& position, const Vector2& size, const Vector4& color)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		DrawQuad({ position.x, position.y, 0.0f }, size, color);
 	}
 
-	void Renderer2D::DrawQuad(const Vector3& position, const Vector2& size, const Vector4& color)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		QS_PROFILE_FUNCTION();
 
-		Matrix4 transform = glm::translate(Matrix4(1.0f), position)
-			* glm::scale(Matrix4(1.0f), { size.x, size.y, 1.0f });
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		DrawQuad(transform, color);
 	}
 
-	void Renderer2D::DrawQuad(const Vector2& position, const Vector2& size, const Ref<Texture2D>& texture, float tilingFactor, const Vector4& tintColor)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
 	{
 		DrawQuad({ position.x, position.y, 0.0f }, size, texture, tilingFactor, tintColor);
 	}
 
-	void Renderer2D::DrawQuad(const Vector3& position, const Vector2& size, const Ref<Texture2D>& texture, float tilingFactor, const Vector4& tintColor)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
 	{
 		QS_PROFILE_FUNCTION();
 
-		Matrix4 transform = glm::translate(Matrix4(1.0f), position)
-			* glm::scale(Matrix4(1.0f), { size.x, size.y, 1.0f });
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		DrawQuad(transform, texture, tilingFactor, tintColor);
 	}
 
-	void Renderer2D::DrawQuad(const Matrix4& transform, const Ref<SubTexture2D>& subTex, float tilingFactor, const Vector4& tintColor, int entityID)
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<SubTexture2D>& subTex, float tilingFactor, const glm::vec4& tintColor, int entityID)
 	{
 		QS_PROFILE_FUNCTION();
 
 		constexpr size_t quadVertexCount = 4;
-		const Vector2* textureCoords = subTex->GetTextureCoords();
+		const glm::vec2* textureCoords = subTex->GetTextureCoords();
 
 		if (s_Data->QuadIndexCount >= Renderer2DData::MaxIndices)
 			NextBatch();
@@ -495,13 +495,13 @@ namespace Quelos
 		s_Data->Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const Matrix4& transform, const Vector4& color, int entityID)
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color, int entityID)
 	{
 		QS_PROFILE_FUNCTION();
 
 		constexpr size_t quadVertexCount = 4;
 		const float textureIndex = 0.0f; // White Texture
-		const Vector2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+		const glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 		const float tilingFactor = 1.0f;
 
 		if (s_Data->QuadIndexCount >= Renderer2DData::MaxIndices)
@@ -523,12 +523,12 @@ namespace Quelos
 		s_Data->Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const Matrix4& transform, const Ref<Texture2D>& texture, float tilingFactor, const Vector4& tintColor, int entityID)
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor, int entityID)
 	{
 		QS_PROFILE_FUNCTION();
 
 		constexpr size_t quadVertexCount = 4;
-		const Vector2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+		const glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
 		if (s_Data->QuadIndexCount >= Renderer2DData::MaxIndices)
 			NextBatch();
@@ -569,34 +569,34 @@ namespace Quelos
 		s_Data->Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawRotatedQuad(const Vector2& position, const Vector2& size, float rotation, const Vector4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
 		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, color);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const Vector3& position, const Vector2& size, float rotation, const Vector4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 	{
 		QS_PROFILE_FUNCTION();
 
-		Matrix4 transform = glm::translate(Matrix4(1.0f), position)
-			* glm::rotate(Matrix4(1.0f), Math::Radians(rotation), { 0.0f, 0.0f, 1.0f })
-			* glm::scale(Matrix4(1.0f), { size.x, size.y, 1.0f });
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::rotate(glm::mat4(1.0f), Math::Radians(rotation), { 0.0f, 0.0f, 1.0f })
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		DrawQuad(transform, color);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const Vector2& position, const Vector2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const Vector4& tintColor)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
 	{
 		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, texture, tilingFactor, tintColor);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const Vector3& position, const Vector2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const Vector4& tintColor)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor)
 	{
 		QS_PROFILE_FUNCTION();
 
-		Matrix4 transform = glm::translate(Matrix4(1.0f), position)
-			* glm::rotate(Matrix4(1.0f), Math::Radians(rotation), {0.0f, 0.0f, 1.0f})
-			* glm::scale(Matrix4(1.0f), { size.x, size.y, 1.0f });
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::rotate(glm::mat4(1.0f), Math::Radians(rotation), {0.0f, 0.0f, 1.0f})
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		DrawQuad(transform, texture, tilingFactor, tintColor);
 	}

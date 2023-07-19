@@ -14,16 +14,16 @@ namespace Quelos
 		static void OnWindowResized(uint32_t width, uint32_t heigth);
 
 		static void BeginScene(OrthographicCamera& camera);
-		static void BeginScene(const Matrix4& viewProjection);
+		static void BeginScene(const glm::mat4& viewProjection);
 		static void EndScene();
 
-		static void Submit(const Ref<Shader> shader, const Ref<VertexArray>& vertexArray, const Matrix4& tranform = Matrix4(1.0f));
+		static void Submit(const Ref<Shader> shader, const Ref<VertexArray>& vertexArray, const glm::mat4& tranform = glm::mat4(1.0f));
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 	private:
 		struct SceneData
 		{
-			Matrix4 ViewProjectionMatrix;
+			glm::mat4 ViewProjectionMatrix;
 		};
 
 

@@ -2,6 +2,7 @@
 #include "ImGuiLayer.h"
 
 #include <imgui.h>
+#include <imgui_internal.h>
 #include <backends\imgui_impl_opengl3.cpp>
 #include <backends\imgui_impl_glfw.cpp>
 
@@ -137,5 +138,10 @@ namespace Quelos
 		colors[ImGuiCol_TitleBg]			= ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 		colors[ImGuiCol_TitleBgActive]		= ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 		colors[ImGuiCol_TitleBgCollapsed]	= ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+	}
+
+	uint32_t ImGuiLayer::GetActiveWidgetID() const
+	{
+		return GImGui->ActiveId;
 	}
 }

@@ -20,27 +20,27 @@ namespace Quelos
 
 		void SetProjection(float left, float right, float bottom, float top);
 
-		const Vector3& GetPosition() const { return m_Position; }
-		void SetPosition(const Vector3& position) { m_Position = position; RecalculateViewMatrix(); }
+		const glm::vec3& GetPosition() const { return m_Position; }
+		void SetPosition(const glm::vec3& position) { m_Position = position; RecalculateViewMatrix(); }
 
 		void SetRotation(float rotaion) { m_Rotation = rotaion; RecalculateViewMatrix(); }
 		float GetRotation() const { return m_Rotation; }
 
-		Vector2 ScreenToWorldPosition(Vector2 screenPosition);
+		glm::vec2 ScreenToWorldPosition(glm::vec2 screenPosition);
 
-		const Matrix4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
-		const Matrix4& GetViewMatrix() const { return m_ViewMatrix; }
-		const Matrix4& GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
+		const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
+		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
+		const glm::mat4& GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
 
-		static Matrix4 Orthographic(float left, float right, float bottom, float top, float zNear, float zFar);
+		static glm::mat4 Orthographic(float left, float right, float bottom, float top, float zNear, float zFar);
 	private:
 		void RecalculateViewMatrix();
 	private:
-		Matrix4 m_ProjectionMatrix;
-		Matrix4 m_ViewMatrix;
-		Matrix4 m_ViewProjectionMatrix;
+		glm::mat4 m_ProjectionMatrix;
+		glm::mat4 m_ViewMatrix;
+		glm::mat4 m_ViewProjectionMatrix;
 
-		Vector3 m_Position = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 m_Position = { 0.0f, 0.0f, 0.0f };
 		float m_Rotation = 0.0f;
 		OrthographicCameraBounds m_Bounds;
 		Window* m_Winodw;

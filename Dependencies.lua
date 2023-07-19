@@ -2,21 +2,23 @@ VULKAN_SDK = os.getenv("VULKAN_SDK")
 MonoProject = os.getenv("MonoProject")
 
 IncludeDir = {}
-IncludeDir["spdlog"] = "%{wks.location}/Quelos/vendor/spdlog/include"
+IncludeDir["Box2D"] = "%{wks.location}/Quelos/vendor/box2d/include"
+IncludeDir["EnTT"] = "%{wks.location}/Quelos/vendor/Entt/include"
+IncludeDir["filewatch"] = "%{wks.location}/Quelos/vendor/filewatch"
 IncludeDir["GLFW"] = "%{wks.location}/Quelos/vendor/glfw/include"
 IncludeDir["Glad"] = "%{wks.location}/Quelos/vendor/Glad/include"
-IncludeDir["ImGui"] = "%{wks.location}/Quelos/vendor/imgui"
 IncludeDir["glm"] = "%{wks.location}/Quelos/vendor/glm"
-IncludeDir["filewatch"] = "%{wks.location}/Quelos/vendor/filewatch"
-IncludeDir["Box2D"] = "%{wks.location}/Quelos/vendor/box2d/include"
-IncludeDir["stb_image"] = "%{wks.location}/Quelos/vendor/stb_image"
-IncludeDir["EnTT"] = "%{wks.location}/Quelos/vendor/Entt/include"
-IncludeDir["yaml_cpp"] = "%{wks.location}/Quelos/vendor/yaml-cpp/include"
+IncludeDir["ImGui"] = "%{wks.location}/Quelos/vendor/imgui"
 IncludeDir["ImGuizmo"] = "%{wks.location}/Quelos/vendor/ImGuizmo"
+IncludeDir["Mono"] = "%{wks.location}/Quelos/vendor/mono/include"
+IncludeDir["msdfgen"] = "%{wks.location}/Quelos/vendor/msdf-atlas-gen/msdfgen"
+IncludeDir["msdf_atlas_gen"] = "%{wks.location}/Quelos/vendor/msdf-atlas-gen/msdf-atlas-gen"
 IncludeDir["Shaderc"] = "%{wks.location}/Quelos/vendor/Shaderc/libshaderc/include"
 IncludeDir["SpirVCross"] = "%{wks.location}/Quelos/vendor/SpirV-Cross"
+IncludeDir["spdlog"] = "%{wks.location}/Quelos/vendor/spdlog/include"
+IncludeDir["stb_image"] = "%{wks.location}/Quelos/vendor/stb_image"
 IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
-IncludeDir["Mono"] = "%{wks.location}/Quelos/vendor/mono/include"
+IncludeDir["yaml_cpp"] = "%{wks.location}/Quelos/vendor/yaml-cpp/include"
 
 LibraryDir = {}
 

@@ -8,30 +8,11 @@
 #include "Quelos/Scene/ScriptableEntity.h"
 #include "Quelos/Scripting/ScriptEngine.h"
 
+#include "Quelos/Physics/Physics2D.h"
 #include "Entity.h"
-
-// Box2D
-#include <box2d/b2_world.h>
-#include <box2d/b2_body.h>
-#include <box2d/b2_fixture.h>
-#include <box2d/b2_polygon_shape.h>
-#include <box2d/b2_circle_shape.h>
 
 namespace Quelos
 {
-	static b2BodyType Rigidbody2DTypeToBox2D(Rigidbody2DComponent::BodyType type)
-	{
-		switch (type)
-		{
-			case Quelos::Rigidbody2DComponent::BodyType::Static:		return b2_staticBody;
-			case Quelos::Rigidbody2DComponent::BodyType::Dynamic:		return b2_dynamicBody;
-			case Quelos::Rigidbody2DComponent::BodyType::Kinematic:	return b2_kinematicBody;
-		}
-
-		QS_CORE_ASSERT(false, "Unknow BodyType");
-		return b2_staticBody;
-	}
-
 	Scene::Scene()
 	{
 	}
@@ -129,7 +110,7 @@ namespace Quelos
 	{
 		// Render 2D
 		Camera* mainCamera = nullptr;
-		Matrix4 camTransform;
+		glm::mat4 camTransform;
 		{
 			auto group = m_Registry.group<CameraComponent>(entt::get<TransformComponent>);
 
@@ -295,7 +276,10 @@ namespace Quelos
 		{
 			GUID guid = srcSceneRegs.get<IDComponent>(data[i]).ID;
 			const auto& name = srcSceneRegs.get<TagComponent>(data[i]).Tag;
-			Entity newEntity = newScene->CreateEntityWithGUID(guid, name);
+			std::string scriptName;
+			if (srcSceneRegs.has<ScriptComponent>(data[i]))
+				scriptName = srcSceneRegs.get<ScriptComponent>(data[i]).ClassName;
+			Entity newEntity = newScene->CreateEntityWithGUID(guid, name, scriptName);
 			enttMap[guid] = (entt::entity)newEntity;
 		}
 
@@ -306,13 +290,19 @@ namespace Quelos
 	}
 
 	Entity Scene::CreateEntity(const std::string& name) { return CreateEntityWithGUID(GUID(), name); }
-	Entity Scene::CreateEntityWithGUID(GUID guid, const std::string& name)
+	Entity Scene::CreateEntityWithGUID(GUID guid, const std::string& name, const std::string& scriptName)
 	{
 		Entity entity = { m_Registry.create(), this };
 		entity.AddComponent<IDComponent>(guid);
 		entity.AddComponent<TransformComponent>();
 		auto& tag = entity.AddComponent<TagComponent>();
 		tag.Tag = name.empty() ? "Entity" : name;
+
+		if (!scriptName.empty())
+		{
+			if (ScriptEngine::EntityClassExists(scriptName))
+				ScriptEngine::OnCreateEntity(entity, scriptName);
+		}
 
 		m_EntityMap[guid] = entity;
 
@@ -345,21 +335,11 @@ namespace Quelos
 		{
 			// Instantiate all script entities
 			auto view = m_Registry.view<ScriptComponent>();
-			std::vector<Entity> scriptEntities;
 			for (auto e : view)
 			{
 				Entity entity = { e, this };
-				const auto& script = entity.GetComponent<ScriptComponent>();
-
-				if (ScriptEngine::EntityClassExists(script.ClassName))
-				{
-					ScriptEngine::OnCreateEntity(entity);
-					scriptEntities.push_back(entity);
-				}
-			}
-
-			for (const auto& entity : scriptEntities)
 				ScriptEngine::OnStartEntity(entity);
+			}
 		}
 	}
 
@@ -392,7 +372,7 @@ namespace Quelos
 			auto& rb = entity.GetComponent<Rigidbody2DComponent>();
 
 			b2BodyDef bodyDef;
-			bodyDef.type = Rigidbody2DTypeToBox2D(rb.Type);
+			bodyDef.type = Utils::Rigidbody2DTypeToBox2D(rb.Type);
 			bodyDef.position.Set(transform.Position.x, transform.Position.y);
 			bodyDef.angle = transform.Rotation.z;
 

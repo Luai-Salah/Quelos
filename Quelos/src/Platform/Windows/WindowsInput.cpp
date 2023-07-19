@@ -343,7 +343,7 @@ namespace Quelos
         return state == GLFW_RELEASE;
     }
 
-    Vector2 Input::GetMousePosition()
+    glm::vec2 Input::GetMousePosition()
     {
         double x, y;
         glfwGetCursorPos(m_Window, &x, &y);

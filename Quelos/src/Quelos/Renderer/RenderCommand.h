@@ -13,7 +13,7 @@ namespace Quelos
 			{ s_RendererAPI->SetViewport(x, y, width, height); }
 
 		inline static void Clear() { s_RendererAPI->Clear(); }
-		inline static void SetClearColor(const Vector4& color) { s_RendererAPI->SetClearColor(color); }
+		inline static void SetClearColor(const glm::vec4& color) { s_RendererAPI->SetClearColor(color); }
 
 		inline static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0)
 		{

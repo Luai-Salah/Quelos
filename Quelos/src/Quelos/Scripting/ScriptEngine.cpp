@@ -6,6 +6,7 @@
 #include "Quelos/Core/Application.h"
 #include <Quelos/Core/Buffer.h>
 #include <Quelos/Core/FileSystem.h>
+#include <Quelos/Project/Project.h>
 
 #include "FileWatch.h"
 
@@ -36,9 +37,9 @@ namespace Quelos
 		{ "System.Single", ScriptFieldType::Float },
 		{ "System.Double", ScriptFieldType::Double },
 		
-		{ "Quelos.Vector2", ScriptFieldType::Vector2 },
-		{ "Quelos.Vector3", ScriptFieldType::Vector3 },
-		{ "Quelos.Vector4", ScriptFieldType::Vector4 },
+		{ "Quelos.float2", ScriptFieldType::Float2 },
+		{ "Quelos.float3", ScriptFieldType::Float3 },
+		{ "Quelos.float4", ScriptFieldType::Float4 },
 
 		{ "Quelos.Entity", ScriptFieldType::Entity }
 	};
@@ -231,7 +232,8 @@ namespace Quelos
 		ScriptGlue::RegisterFunctions();
 
 		LoadAssembly("Resources/Scripts/Quelos-ScriptCore.dll");
-		bool status = LoadAppAssembly("SandboxProject/Assets/Scripts/Binaries/Sandbox.dll");
+		auto scriptModulePath = Project::GetAssetDirectory() / Project::GetActiveProject()->GetConfig().ScriptModulePath;
+		bool status = LoadAppAssembly(scriptModulePath);
 		if (!status)
 			return;
 		LoadAssemblyClasses();
@@ -241,13 +243,12 @@ namespace Quelos
 		s_Data->EntityClass = ScriptClass("Quelos", "Entity", true);
 	}
 
-	void ScriptEngine::OnCreateEntity(Entity entity)
+	void ScriptEngine::OnCreateEntity(Entity entity, const std::string& scriptName)
 	{
-		const auto& script = entity.GetComponent<ScriptComponent>();
-		if (ScriptEngine::EntityClassExists(script.ClassName))
+		if (ScriptEngine::EntityClassExists(scriptName))
 		{
 			Ref<ScriptInstance> instance =
-				CreateRef<ScriptInstance>(s_Data->EntityClasses[script.ClassName], entity);
+				CreateRef<ScriptInstance>(s_Data->EntityClasses[scriptName], entity);
 
 			GUID entityID = entity.GetGUID();
 

@@ -14,6 +14,6 @@ namespace Quelos
 		static bool IsMouseButtonPressed(MouseButtonCode button);
 		static bool IsMouseButtonReleased(MouseButtonCode button);
 
-		static Vector2 GetMousePosition();
+		static glm::vec2 GetMousePosition();
 	};
 }

@@ -20,16 +20,16 @@ namespace Quelos
 
 		virtual void SetInt(const std::string& name, int i) override;
 		virtual void SetIntArray(const std::string& name, int* values, uint32_t count) override;
-		virtual void SetMatrix4(const std::string& name, const Matrix4& m) override;
-		virtual void SetVector4(const std::string& name, const Vector4& v) override;
-		virtual void SetVector3(const std::string& name, const Vector3& v) override;
+		virtual void SetMatrix4(const std::string& name, const glm::mat4& m) override;
+		virtual void SetVector4(const std::string& name, const glm::vec4& v) override;
+		virtual void SetVector3(const std::string& name, const glm::vec3& v) override;
 		virtual void SetFloat(const std::string& name, float i) override;
 
-		void UploadUniformMat4(const std::string& name, const Matrix4& matrix4);
+		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix4);
 
-		void UploadUniformVector2(const std::string& name, const Vector2& vec2);
-		void UploadUniformVector3(const std::string& name, const Vector3& vec3);
-		void UploadUniformVector4(const std::string& name, const Vector4& vec4);
+		void UploadUniformVector2(const std::string& name, const glm::vec2& vec2);
+		void UploadUniformVector3(const std::string& name, const glm::vec3& vec3);
+		void UploadUniformVector4(const std::string& name, const glm::vec4& vec4);
 
 		void UploadUniformFloat(const std::string& name, float value);
 

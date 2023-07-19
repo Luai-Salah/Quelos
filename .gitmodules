@@ -19,3 +19,6 @@
 [submodule "Quelos/vendor/box2d"]
 	path = Quelos/vendor/box2d
 	url = https://github.com/TheCherno/box2d.git
+[submodule "Quelos/vendor/msdf-atlas-gen"]
+	path = Quelos/vendor/msdf-atlas-gen
+	url = https://github.com/TheCherno/msdf-atlas-gen.git

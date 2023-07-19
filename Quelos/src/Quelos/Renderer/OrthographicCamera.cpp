@@ -24,7 +24,7 @@ namespace Quelos
 		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
 	}
 
-	Vector2 OrthographicCamera::ScreenToWorldPosition(Vector2 screenPosition)
+	glm::vec2 OrthographicCamera::ScreenToWorldPosition(glm::vec2 screenPosition)
 	{
 		auto width = m_Winodw->GetWidth();
 		auto height = m_Winodw->GetHeight();
@@ -39,17 +39,17 @@ namespace Quelos
 	{
 		QS_PROFILE_FUNCTION();
 
-		Matrix4 transform = glm::translate(Matrix4(1.0f), m_Position) *
-			glm::rotate(Matrix4(1.0f), Math::Radians(m_Rotation), Vector3(0.0f, 0.0f, 1.0f));
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_Position) *
+			glm::rotate(glm::mat4(1.0f), Math::Radians(m_Rotation), glm::vec3(0.0f, 0.0f, 1.0f));
 
 		m_ViewMatrix = glm::inverse(transform);
 
 		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
 	}
 
-	Matrix4 OrthographicCamera::Orthographic(float left, float right, float bottom, float top, float zNear, float zFar)
+	glm::mat4 OrthographicCamera::Orthographic(float left, float right, float bottom, float top, float zNear, float zFar)
 	{
-		Matrix4 Result(1);
+		glm::mat4 Result(1);
 		Result[0][0] = static_cast<float>(2) / (right - left);
 		Result[1][1] = static_cast<float>(2) / (top - bottom);
 		Result[2][2] = -static_cast<float>(2) / (zFar - zNear);
