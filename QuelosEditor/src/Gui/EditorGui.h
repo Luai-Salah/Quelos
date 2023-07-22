@@ -10,11 +10,11 @@ namespace Quelos
 	{
 	public:
 		static bool CheckBox(const std::string& label, bool& value);
-		static bool InputText(const std::string& label, std::string& text, const Vector4& textColor);
+		static bool InputText(const std::string& label, std::string& text, const glm::vec4& textColor);
 		static bool InputFloat(const std::string& label, float& value, float speed = 0.1f, float min = 0.0f, float max = 0.0f, float columWidth = 100.0f);
-		static bool InputVector2(const std::string& label, Vector2& values, float resetValue = 0.0f, float speed = 0.1f, float min = 0.0f, float max = 0.0f);
-		static void InputVector3(const std::string& label, Vector3& values, float resetValue = 0.0f, float columWidth = 100.0f);
-		static bool InputColor4(const std::string& label, Vector4& values, float resetValue = 1.0f);
+		static bool InputVector2(const std::string& label, glm::vec2& values, float resetValue = 0.0f, float speed = 0.1f, float min = 0.0f, float max = 0.0f);
+		static void InputVector3(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columWidth = 100.0f);
+		static bool InputColor4(const std::string& label, glm::vec4& values, float resetValue = 1.0f);
 		static void TextureSlot(const char* label, Ref<Texture2D>& texture);
 		static void TextureSlot(const char* label, Ref<SubTexture2D>& texture);
 		static void EntitySlot(const char* label, entt::entity& entityID);

@@ -44,7 +44,7 @@ namespace Quelos
 		return used;
 	}
 
-	bool EditorGUI::InputText(const std::string& label, std::string& text, const Vector4& textColor = Vector4{ 0 })
+	bool EditorGUI::InputText(const std::string& label, std::string& text, const glm::vec4& textColor = glm::vec4{ 0 })
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -61,7 +61,7 @@ namespace Quelos
 
 		ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
-		if (textColor != Vector4{0})
+		if (textColor != glm::vec4{0})
 			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(textColor.x, textColor.y, textColor.z, textColor.w));
 
 		static char buffer[64];
@@ -73,7 +73,7 @@ namespace Quelos
 
 		ImGui::PopItemWidth();
 		ImGui::PopStyleVar();
-		if (textColor != Vector4 { 0 })
+		if (textColor != glm::vec4 { 0 })
 			ImGui::PopStyleColor();
 		ImGui::Columns(1);
 
@@ -114,7 +114,7 @@ namespace Quelos
 		return used;
 	}
 
-	bool EditorGUI::InputVector2(const std::string& label, Vector2& values, float resetValue, float speed, float min, float max)
+	bool EditorGUI::InputVector2(const std::string& label, glm::vec2& values, float resetValue, float speed, float min, float max)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -182,7 +182,7 @@ namespace Quelos
 		return used;
 	}
 
-	void EditorGUI::InputVector3(const std::string& label, Vector3& values, float resetValue, float columWidth)
+	void EditorGUI::InputVector3(const std::string& label, glm::vec3& values, float resetValue, float columWidth)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -264,7 +264,7 @@ namespace Quelos
 		ImGui::Spacing();
 	}
 
-	bool EditorGUI::InputColor4(const std::string& label, Vector4& values, float resetValue)
+	bool EditorGUI::InputColor4(const std::string& label, glm::vec4& values, float resetValue)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];

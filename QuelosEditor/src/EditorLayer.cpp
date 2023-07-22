@@ -4,6 +4,7 @@
 #include "Quelos/Utiles/PlatformUtils.h"
 #include "Quelos/Core/Application.h"
 #include "Quelos/Scripting/ScriptEngine.h"
+#include "Quelos/Renderer/Font.h"
 
 #include "Gui/EditorGUI.h"
 
@@ -58,6 +59,7 @@ namespace Quelos
         m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
         
         m_SpriteEditorWindow.DisplayTexture(m_Container);
+        Font font("Assets\\Fonts\\OpenSans\\OpenSans-VariableFont_wdth,wght.ttf");
     }
 
     void EditorLayer::OnUpdate(TimeStep ts)
@@ -317,7 +319,7 @@ namespace Quelos
 
                 ImVec2 viewPortPanelSize = ImGui::GetContentRegionAvail();
 
-                if (m_ViewportSize != *reinterpret_cast<Vector2*>(&viewPortPanelSize))
+                if (m_ViewportSize != *reinterpret_cast<glm::vec2*>(&viewPortPanelSize))
                 {
                     m_ViewportSize = { viewPortPanelSize.x, viewPortPanelSize.y };
                     m_FrameBuffer->Resize(static_cast<uint32_t>(m_ViewportSize.x), static_cast<uint32_t>(m_ViewportSize.y));
@@ -372,14 +374,14 @@ namespace Quelos
                     const float windowWidth = ImGui::GetWindowWidth();
                     const float windowHeight = ImGui::GetWindowHeight();
 
-                    const Matrix4& cameraProjection = m_EditorCamera.GetProjection();
-                    Matrix4 cameraView = m_EditorCamera.GetViewMatrix();
+                    const glm::mat4& cameraProjection = m_EditorCamera.GetProjection();
+                    glm::mat4 cameraView = m_EditorCamera.GetViewMatrix();
 
                     ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
 
                     // Entity transform
                     auto& tc = selectedEntity.GetComponent<TransformComponent>();
-                    Matrix4 transform = tc.GetTransformMatrix();
+                    glm::mat4 transform = tc.GetTransformMatrix();
 
                     const bool snap = Input::GetKey(KeyCode::LeftControl);
                     float snapValue = 0.5f;
@@ -393,10 +395,10 @@ namespace Quelos
                     
                     if (ImGuizmo::IsUsing())
                     {
-                        Vector3 position, rotation, scale;
+                        glm::vec3 position, rotation, scale;
                         Math::DecomposeTransform(transform, position, rotation, scale);
 
-                        const Vector3 deltaRotation = rotation - tc.Rotation;
+                        const glm::vec3 deltaRotation = rotation - tc.Rotation;
                         tc.Position = position;
                         tc.Rotation += deltaRotation;
                         tc.Scale = scale;
@@ -413,7 +415,7 @@ namespace Quelos
         else
         {
             //ImGui::Text("Light:");
-            //EditorGUI::InputVector3("   Position", m_LightPosition);
+            //EditorGUI::Inputglm::vec3("   Position", m_LightPosition);
             //EditorGUI::InputColor4("Object Color: ", m_Material.Ambient);
 
             //std::string name = "None";
@@ -571,22 +573,22 @@ namespace Quelos
             m_ActiveScene->GetAllEntitiesWith<TransformComponent, BoxCollider2DComponent>()
                 .each([&](auto entity, TransformComponent& tc, BoxCollider2DComponent bc)
                 {
-	                const Vector3 pos = tc.Position + Vector3(bc.Offset.x, bc.Offset.y, 0.001f);
-	                const Vector3 scale = tc.Scale * Vector3(bc.Size.x, bc.Size.y, 1.0f) * 2.0f;
+	                const glm::vec3 pos = tc.Position + glm::vec3(bc.Offset.x, bc.Offset.y, 0.001f);
+	                const glm::vec3 scale = tc.Scale * glm::vec3(bc.Size.x, bc.Size.y, 1.0f) * 2.0f;
 
-	                const Matrix4 transform = glm::translate(Matrix4(1.0f), pos)
-                        * glm::rotate(Matrix4(1.0f), tc.Rotation.z, Vector3(0.0f, 0.0f, 1.0f))
-                        * glm::scale(Matrix4(1.0f), scale);
+	                const glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos)
+                        * glm::rotate(glm::mat4(1.0f), tc.Rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
+                        * glm::scale(glm::mat4(1.0f), scale);
                     Renderer2D::DrawRect(transform, { 0.0f, 1.0f, 0.0f, 1.0f });
                 });
 
             m_ActiveScene->GetAllEntitiesWith<TransformComponent, CircleCollider2DComponent>()
                 .each([&](auto entity, TransformComponent& tc, CircleCollider2DComponent cc)
                 {
-	                const Vector3 pos = tc.Position + Vector3(cc.Offset.x, cc.Offset.y, 0.001f);
-	                const Vector3 scale = tc.Scale * cc.Radius * 2.0f;
+	                const glm::vec3 pos = tc.Position + glm::vec3(cc.Offset.x, cc.Offset.y, 0.001f);
+	                const glm::vec3 scale = tc.Scale * cc.Radius * 2.0f;
 
-	                const Matrix4 transform = glm::translate(Matrix4(1.0f), pos) * glm::scale(Matrix4(1.0f), scale);
+	                const glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * glm::scale(glm::mat4(1.0f), scale);
                     Renderer2D::DrawCircle(transform, { 0.0f, 1.0f, 0.0f, 1.0f }, 0.01f);
 
                 });
@@ -597,10 +599,10 @@ namespace Quelos
         {
             TransformComponent tc = selectedEntity.GetComponent<TransformComponent>();
 
-            const Vector3 pos = tc.Position + Vector3(0.0f, 0.0f, 0.001f);
-            const Vector3 scale = tc.Scale;
+            const glm::vec3 pos = tc.Position + glm::vec3(0.0f, 0.0f, 0.001f);
+            const glm::vec3 scale = tc.Scale;
 
-            const Matrix4 transform = glm::translate(Matrix4(1.0f), pos) * glm::rotate(Matrix4(1.0f), tc.Rotation.z, Vector3(0.0f, 0.0f, 1.0f)) * Math::Scale(scale);
+            const glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * glm::rotate(glm::mat4(1.0f), tc.Rotation.z, glm::vec3(0.0f, 0.0f, 1.0f)) * Math::Scale(scale);
             Renderer2D::DrawRect(transform, { 1.0f, 0.5f, 0.0f, 1.0f }, selectedEntity);
         }
 
@@ -793,6 +795,7 @@ namespace Quelos
         if (Ref<Project> project = Project::Load(path))
         {
             std::filesystem::path assetsPath = Project::GetAssetDirectory();
+            ScriptEngine::Init();
             AssetsManager::Init(assetsPath);
             m_ContentBrowserPanel.SetAssetsPath(assetsPath);
 

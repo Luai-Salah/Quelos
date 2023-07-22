@@ -469,12 +469,18 @@ namespace Quelos
 	void ScriptEngine::ShutdownMono()
 	{
 		mono_domain_set(mono_get_root_domain(), false);
-		mono_domain_unload(s_Data->AppDomain);
+		if (s_Data->AppDomain)
+		{
+			mono_domain_unload(s_Data->AppDomain);
+			s_Data->AppDomain = nullptr;
+		}
 
-		s_Data->AppDomain = nullptr;
 
-		mono_jit_cleanup(s_Data->RootDomain);
-		s_Data->RootDomain = nullptr;
+		if (s_Data->RootDomain)
+		{
+			mono_jit_cleanup(s_Data->RootDomain);
+			s_Data->RootDomain = nullptr;
+		}
 	}
 
 	ScriptClass::ScriptClass(const std::string& classNamespace, const std::string& className, bool isCore)

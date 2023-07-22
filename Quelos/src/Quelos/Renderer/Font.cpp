@@ -13,7 +13,8 @@ namespace Quelos
 
 		if (ft)
 		{
-			msdfgen::FontHandle* fontHandle = msdfgen::loadFont(ft, filePath.string().c_str());
+			std::string fileString = filePath.string();
+			msdfgen::FontHandle* fontHandle = msdfgen::loadFont(ft, fileString.c_str());
 			if (fontHandle)
 			{
 				msdfgen::Shape shape;

@@ -35,7 +35,7 @@ namespace Quelos
 			m_EditorCamera.OnUpdate(ts);
 		Renderer2D::BeginScene(m_EditorCamera);
 		if (m_TextureToDisplay)
-		Renderer2D::DrawQuad(Vector3(0.0f), Vector2(1.0f), m_TextureToDisplay);
+		Renderer2D::DrawQuad(glm::vec3(0.0f), glm::vec2(1.0f), m_TextureToDisplay);
 
 		Renderer2D::EndScene();
 
@@ -48,7 +48,7 @@ namespace Quelos
 		{
 			ImVec2 viewPortPanelSize = ImGui::GetContentRegionAvail();
 
-			if (m_ViewportSize != *reinterpret_cast<Vector2*>(&viewPortPanelSize))
+			if (m_ViewportSize != *reinterpret_cast<glm::vec2*>(&viewPortPanelSize))
 			{
 				m_ViewportSize = { viewPortPanelSize.x, viewPortPanelSize.y };
 				m_FrameBuffer->Resize(static_cast<uint32_t>(m_ViewportSize.x), static_cast<uint32_t>(m_ViewportSize.y));

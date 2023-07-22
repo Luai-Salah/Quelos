@@ -16,21 +16,21 @@ namespace Lighting
 		void OnImGuiRender();
 	private:
 		EditorCamera& m_EditorCamera;
-		Matrix4 m_Transform;
+		glm::mat4 m_Transform;
 
 		struct Material
 		{
-			Vector4 Ambient{ 1.0f };
+			glm::vec4 Ambient{ 1.0f };
 			float Shininess = 32.0f;
 		};
 
 		struct Light
 		{
-			Vector4 Position;
+			glm::vec4 Position;
 
-			Vector4 Ambient;
-			Vector4 Diffuse;
-			Vector4 Specular;
+			glm::vec4 Ambient;
+			glm::vec4 Diffuse;
+			glm::vec4 Specular;
 		};
 
 		Light m_Light;
@@ -51,6 +51,6 @@ namespace Lighting
 		Ref<Shader> m_LampShader;
 		Ref<VertexArray> m_LampVA;
 
-		Vector3 m_LightPosition{ -0.2f, 1.0f, -0.3f };
+		glm::vec3 m_LightPosition{ -0.2f, 1.0f, -0.3f };
 	};
 }

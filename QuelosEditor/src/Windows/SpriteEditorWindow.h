@@ -19,7 +19,7 @@ namespace Quelos
 	private:
 		Ref<Texture2D> m_TextureToDisplay;
 		Ref<FrameBuffer> m_FrameBuffer;
-		Vector2 m_ViewportSize;
+		glm::vec2 m_ViewportSize;
 		bool m_WindowFocused = false;
 		bool m_WindowHovered = false;
 

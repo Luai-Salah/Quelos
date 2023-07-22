@@ -60,8 +60,8 @@ namespace Quelos
 		std::filesystem::path m_EditorScenePath;
 		Entity m_SquareEntity, m_CameraEntity, m_SecondCamera, m_HoveredEntity;
 
-		Vector2 m_ViewportSize;
-		Vector2 m_ViewportBounds[2];
+		glm::vec2 m_ViewportSize;
+		glm::vec2 m_ViewportBounds[2];
 		bool m_ViewportFocused = false;
 		bool m_ViewportHovered = false;
 

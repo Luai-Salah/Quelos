@@ -23,9 +23,9 @@ namespace Quelos
 			auto& rb = GetComponent<Rigidbody2DComponent>();
 
 			if (Input::GetKey(KeyCode::A))
-				rb.ApplyForceToCenter(Vector3(-1.0f, 0.0f, 0.0f) * (m_Speed * ts));
+				rb.ApplyForceToCenter(glm::vec3(-1.0f, 0.0f, 0.0f) * (m_Speed * ts));
 			if (Input::GetKey(KeyCode::D))
-				rb.ApplyForceToCenter(Vector3(1.0f, 0.0f, 0.0f) * (m_Speed * ts));
+				rb.ApplyForceToCenter(glm::vec3(1.0f, 0.0f, 0.0f) * (m_Speed * ts));
 		}
 	};
 
@@ -149,7 +149,7 @@ namespace Quelos
 		{
 			EditorGUI::InputVector3("Position", transform.Position, 0.0f, 100.0f);
 
-			Vector3 rotation = Math::Degrees(transform.Rotation);
+			glm::vec3 rotation = Math::Degrees(transform.Rotation);
 			EditorGUI::InputVector3("Rotation", rotation, 0.0f, 100.0f);
 			transform.Rotation = Math::Radians(rotation);
 
@@ -222,7 +222,7 @@ namespace Quelos
 		{
 			bool scriptExists = ScriptEngine::EntityClassExists(sc.ClassName);
 
-			if (EditorGUI::InputText("Class", sc.ClassName, !scriptExists ? Vector4 {0.9f, 0.2f, 0.2f, 1.0f} : Vector4{ 0 }))
+			if (EditorGUI::InputText("Class", sc.ClassName, !scriptExists ? glm::vec4 {0.9f, 0.2f, 0.2f, 1.0f} : glm::vec4{ 0 }))
 				return;
 
 			// Fields
