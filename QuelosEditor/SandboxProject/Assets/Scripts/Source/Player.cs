@@ -7,21 +7,21 @@ namespace Sandbox
         public float Speed = 20f;
         public float Time;
 
-        private Rigidbody2DComponent m_Rigidbody;
+        private Rigidbody2D m_Rigidbody;
 
         private void OnStart()
         {
-            m_Rigidbody = GetComponent<Rigidbody2DComponent>();
+            m_Rigidbody = GetComponent<Rigidbody2D>();
         }
 
         private void OnUpdate(float ts)
         {
-            Vector2 velocity = Vector2.Zero;
+            float2 velocity = float2.zero;
 
             if (Input.GetKey(KeyCode.D))
-                velocity.X = 1f;
+                velocity.x = 1f;
             if (Input.GetKey(KeyCode.A))
-                velocity.X = -1f;
+                velocity.x = -1f;
 
             velocity *= Speed * ts;
             m_Rigidbody.ApplyLinearImpulse(velocity);

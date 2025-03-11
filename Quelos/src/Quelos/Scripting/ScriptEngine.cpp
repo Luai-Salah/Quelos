@@ -232,7 +232,7 @@ namespace Quelos
 		ScriptGlue::RegisterFunctions();
 
 		LoadAssembly("Resources/Scripts/Quelos-ScriptCore.dll");
-		auto scriptModulePath = Project::GetAssetDirectory() / Project::GetActiveProject()->GetConfig().ScriptModulePath;
+		auto scriptModulePath = Project::GetAssetDirectory() / Project::GetActiveProject()->GetConfig().ScriptModulePath / (Project::GetActiveProject()->GetConfig().Name + ".dll");
 		bool status = LoadAppAssembly(scriptModulePath);
 		if (!status)
 			return;

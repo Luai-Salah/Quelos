@@ -14,12 +14,12 @@ namespace Sandbox
         {
             if (!m_Player)
             {
-                Log("Player is null! trying to find the entity...");
+                print("Player is null! trying to find the entity...");
                 m_Player = FindEntityByName("Player").As<Player>();
                 return;
             }
 
-            Transform.Position = new Vector3(m_Player.Position.XY, Transform.Position.Z);
+            Transform.Position = new float3(m_Player.Position.xy, Transform.Position.z);
         }
     }
 }
